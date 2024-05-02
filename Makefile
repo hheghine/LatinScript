@@ -24,13 +24,16 @@ PRINT_NAME = printf "\n$(LINE_COLORS_1) %4s $(NAME_LINE_1)$(LINE_COLORS_2) %4s $
 
 
 SRCS_DIR	= omnia/src/
+CORE_DIR	= $(SRCS_DIR)core/
 
-SRC_FILES	= $(SRCS_DIR)main.cpp 
+SRC_FILES	= $(SRCS_DIR)main.cpp \
+				$(addprefix $(CORE_DIR), Object.cpp)
 
-INCLUDES	=	-Iinc
+INCLUDES	=	-Iomnia/inc \
+					-Iomnia/inc/core
 
 CXX			= @c++
-CXXFLAGS 	= -g3 -Wall -Wextra -Werror -std=c++98 $(INCLUDES)
+CXXFLAGS 	= -g3 -Wall -Wextra -Werror $(INCLUDES)
 
 
 OBJS_DIR	= .objects
@@ -47,8 +50,9 @@ $(OBJS_DIR) :
 	@$(PRINT_NAME)
 	@mkdir -p $(OBJS_DIR)
 	@mkdir -p $(OBJS_DIR)/$(SRCS_DIR)
+	@mkdir -p $(OBJS_DIR)/$(CORE_DIR)
 	@sleep 0.1
-	@printf "$(LINE_COLORS_6)%15s Compilation of $(NAME) terminated $(END)$(LINE_COLORS_1)\
+	@printf "$(LINE_COLORS_3)%15s Compilation of $(NAME) terminated $(END)$(LINE_COLORS_1)\
 	$(BLINK)[$(LINE_COLORS_6)$(BLINK)success$(BLINK)$(LINE_COLORS_1)]$(END)\n\n"
 
 $(OBJS) : $(OBJS_DIR)/%.o : %.cpp
@@ -60,7 +64,7 @@ clean :
 
 fclean : clean
 	@rm -rf $(NAME)
-	@printf "\n$(LINE_COLORS_6)%20s Removing $(NAME)$(END)\n\n"
+	@printf "\n$(LINE_COLORS_3)%20s Removing $(NAME)$(END)\n\n"
 
 re : fclean all
 
