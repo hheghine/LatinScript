@@ -2,6 +2,7 @@
 # define LATINSCRIPT_HPP
 
 # include <iostream>
+# include <algorithm>
 # include <vector>
 # include <string>
 # include <unordered_map>
@@ -103,8 +104,10 @@ class LatinScript {
 		~LatinScript();
 
 		void	letsGo(const std::string& filename);
-		bool	createVariable(const svector& vec);
-		void	handleManipulation(const svector& vec, const_iterator it);
+		void	createVariable(const svector& vec);
+		void	handleStatement(const svector& vec, const_iterator it);
+		void	handleOperator(const svector& vec, const_iterator it);
+		void	handleAssignment(const svector& vec, const_iterator it);
 };
 
 

@@ -1,10 +1,6 @@
 
-
 numerus x
 numerus y = 5
-
-<
-<<
 
 x = 5
 
