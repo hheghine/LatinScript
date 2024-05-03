@@ -13,6 +13,11 @@ Numerus::Numerus(Object* ptr)
 		*(int *)value = *(int *)ptr->value;
 }
 
+std::string	Numerus::__string() const
+{
+	return std::to_string(*((int *)value));
+}
+
 Numerus::~Numerus()
 {
 	if (value)

@@ -11,7 +11,7 @@ class Numerus : public Object {
 		Numerus(Object* ptr);
 		~Numerus();
 
-		// std::string	__string() const;
+		std::string	__string() const;
 };
 
 #endif

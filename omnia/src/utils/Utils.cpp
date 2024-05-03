@@ -39,3 +39,52 @@ bool	ls::isOperator(const std::string& key)
 	return (key == "=" || key == "+" || key == "-" \
 			|| key == "*" || key == "/");
 }
+
+int	ls::toInt(const std::string& str)
+{
+	std::stringstream ss(str);
+	int val = 0;
+	char remaining;
+
+	if (!(ss >> val) || ss.get(remaining))
+		throw std::invalid_argument("invalid assignment operation: " + str);
+	return val;
+}
+
+std::string	ls::extractString(const std::string& line, char key)
+{
+	std::string::const_iterator start;
+	std::string::const_iterator end;
+	bool opened = false;
+
+	for (auto it = line.begin(); it != line.end(); ++it)
+	{
+		if (*it == key && !opened)
+		{
+			start = it + 1;
+			opened = true;
+			continue ;
+		}
+		if (*it == key)
+		{
+			end = it;
+			it ++;
+			while (it != line.end() && (*(it) == ' ' ||  *(it) == '\t'))
+				it ++;
+			if (it != line.end())
+				throw std::invalid_argument("wrong syntax: " + line);
+			return std::string(start, end);
+		}
+	}
+	throw std::invalid_argument("wrong syntax: " + line);
+}
+
+std::string::const_iterator	ls::search(std::string::const_iterator start, std::string::const_iterator end, char key)
+{
+	std::string::const_iterator it;
+
+	for (it = start; it != end; ++it)
+		if (*it == key)
+			return it;
+	return end;
+}

@@ -1,7 +1,12 @@
 
 numerus x
-numerus y = 5
+numerus y = -1
 
-x = 5
+scribere << y
+
+x = y
+
+scribere << x
+scribere << *hello*
 
 dum < x == 5 >

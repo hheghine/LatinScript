@@ -70,7 +70,7 @@ inline static void	usage()
 
 inline static void	displayInput(const svector& vec)
 {
-	std::cout << BGRY << "[ INPUT  ]\t" << WHT;
+	std::cout << BGRY << "[ INPUT  ]\t" << GRY;
 
 	for (auto it = vec.begin(); it != vec.end(); ++it)
 		std::cout << *it << " ";
@@ -79,8 +79,9 @@ inline static void	displayInput(const svector& vec)
 
 inline static void	displayOutput(bool flag, const std::string& message)
 {
-	std::cout << BGRY << "[ OUTPUT ]\t" << \
-	(flag ? MAIN : GRY) << message << CRST << std::endl;
+	std::cout << MAIN << "[ OUTPUT ]\t";
+	flag ? std::cout << MAIN << message : std::cout << GRY << "-";
+	std::cout << CRST << std::endl;
 }
 
 /*------------------UTILS------------------*/
@@ -92,6 +93,12 @@ bool		isOperator(const std::string& key);
 bool		isType(const std::string& statement);
 bool		isLoop(const std::string& statement);
 bool		isCondition(const std::string& statement);
+
+int	toInt(const std::string& str);
+
+std::string::const_iterator	search(std::string::const_iterator start, std::string::const_iterator end, char key);
+
+std::string	extractString(const std::string& line, char key);
 
 /*-----------LATIN-SCRIPT CLASS-----------*/
 
@@ -108,6 +115,7 @@ class LatinScript {
 		void	handleStatement(const svector& vec, const_iterator it);
 		void	handleOperator(const svector& vec, const_iterator it);
 		void	handleAssignment(const svector& vec, const_iterator it);
+		void	handleOutput(const svector& vec, const std::string& line);
 };
 
 

@@ -2,13 +2,15 @@
 
 using namespace ls;
 
+static bool _output;
+
 LatinScript::LatinScript(const std::string& filename)
 {
 	try {
 		letsGo(filename);
 	} catch (const std::exception& e) {
 		std::cout << ls::MAIN << "[ " << ls::RED << "✘" \
-		<< ls::MAIN << " ] " << "exeption: " << e.what() \
+		<< ls::MAIN << " ]" << "\t\texeption: " << e.what() \
 		<< ls::CRST << std::endl;
 	}
 }
@@ -30,6 +32,7 @@ void	LatinScript::letsGo(const std::string& filename)
 
 	while (std::getline(file, line))
 	{
+		_output = false;
 		svector vec = splitLine(line);
 		if (vec.empty())
 			continue;
@@ -43,7 +46,7 @@ void	LatinScript::letsGo(const std::string& filename)
 
 			if (vec.begin() + 2 == vec.end())
 			{
-				displayOutput(false, "NONE ( " + vec[1] + " declaration )");
+				displayOutput(false, "");
 				continue ;
 			}
 
@@ -55,12 +58,16 @@ void	LatinScript::letsGo(const std::string& filename)
 		else if (vars.find(vec[0]) != vars.end())
 			it += 1;
 		else if (isCondition(vec[0]))
-			std::cout << "CONDITION !!" << std::endl;
+			std::cout << ls::GRY << "\t\tCONDITION!" << std::endl;
 		else if (isLoop(vec[0]))
-			std::cout << "LOOP !!" << std::endl;
+			std::cout << ls::GRY <<"\t\tLOOP!" << std::endl;
+		else if (vec[0] == "scribere")
+			handleOutput(vec, line);
 		else
 			throw std::invalid_argument("bad start statement: " + vec[0]);
-		handleStatement(vec, vec.begin() + 2);
+		handleStatement(vec, it);
+		if (!_output)
+			displayOutput(false, "");
 	}
 
 }
@@ -111,8 +118,49 @@ void	LatinScript::handleOperator(const svector& vec, const_iterator it)
 
 void	LatinScript::handleAssignment(const svector& vec, const_iterator it)
 {
-	(void) vec;
-	(void) it;
+	if (it == vec.end())
+		throw std::invalid_argument("invalid assignment operation");
+
+	if (std::isdigit((*it)[0]) || (*it)[0] == '-' || (*it)[0] == '+')
+	{
+		delete (int *)vars[*(it - 2)]->value; // HARDCODE!! FIX!!!
+		vars[*(it - 2)]->value = new int(toInt(*it));
+	}
+	else if (vars.find(*it) != vars.end() && \
+		vars[*(it - 2)]->type == vars[*it]->type)
+	{
+		if (vars[*(it - 2)]->links == 1)
+		{
+			objects.erase(vars[*(it - 2)]);
+			delete vars[*(it - 2)];
+		}
+		vars[*(it - 2)] = vars[*it];
+		vars[*it]->links ++;
+	}
+
+}
+
+void	LatinScript::handleOutput(const svector& vec, const std::string& line)
+{
+	auto it = vec.begin();
+
+	if (*it == "scribere" && *(it + 1) == "<<")
+	{
+		if (search(line.begin(), line.end(), '*') != line.end())
+		{
+			std::string output = extractString(line, '*');
+			displayOutput(true, output);
+			_output = true;
+			return ;
+		}
+		else if (vars.find(vec[2]) != vars.end())
+		{
+			displayOutput(true, vars[vec[2]]->__string());
+			_output = true;
+		}
+		else
+			throw std::invalid_argument("invalid input or nothing to output: " + vec[2]);
+	}
 }
 
 LatinScript::~LatinScript()
