@@ -1,12 +1,11 @@
-< numerus x = 10
-< numerus y = 5
+numerus x = 10
+numerus y = 5
 
-< x = y
+x = y
 
 ##### dum = while #####
-< dum < x != 100 >
+dum < x != 100 >
 >>
 	< x += 5
 	< 6
 >>
-

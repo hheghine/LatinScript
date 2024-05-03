@@ -25,15 +25,17 @@ PRINT_NAME = printf "\n$(LINE_COLORS_1) %4s $(NAME_LINE_1)$(LINE_COLORS_2) %4s $
 
 SRCS_DIR	= omnia/src/
 CORE_DIR	= $(SRCS_DIR)core/
+UTILS_DIR	= $(SRCS_DIR)utils/
 
-SRC_FILES	= $(SRCS_DIR)main.cpp \
-				$(addprefix $(CORE_DIR), Object.cpp)
+SRC_FILES	= $(addprefix $(SRCS_DIR), main.cpp LatinScript.cpp) \
+				$(addprefix $(UTILS_DIR), Utils.cpp) \
+				$(addprefix $(CORE_DIR), Object.cpp Numerus.cpp)
 
 INCLUDES	=	-Iomnia/inc \
 					-Iomnia/inc/core
 
 CXX			= @c++
-CXXFLAGS 	= -g3 -Wall -Wextra -Werror $(INCLUDES)
+CXXFLAGS 	= -g3 -Wall -Wextra -Werror $(INCLUDES) -fsanitize=address
 
 
 OBJS_DIR	= .objects
@@ -51,6 +53,7 @@ $(OBJS_DIR) :
 	@mkdir -p $(OBJS_DIR)
 	@mkdir -p $(OBJS_DIR)/$(SRCS_DIR)
 	@mkdir -p $(OBJS_DIR)/$(CORE_DIR)
+	@mkdir -p $(OBJS_DIR)/$(UTILS_DIR)
 	@sleep 0.1
 	@printf "$(LINE_COLORS_3)%15s Compilation of $(NAME) terminated $(END)$(LINE_COLORS_1)\
 	$(BLINK)[$(LINE_COLORS_6)$(BLINK)success$(BLINK)$(LINE_COLORS_1)]$(END)\n\n"

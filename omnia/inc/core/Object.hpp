@@ -11,6 +11,7 @@ public:
 	int			links;
 
 	Object(const std::string& type, void* value, int links);
+	virtual ~Object() {}
 
 	virtual std::string __string() const;
 };
