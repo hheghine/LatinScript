@@ -36,27 +36,31 @@ void	LatinScript::letsGo(const std::string& filename)
 
 		displayInput(vec);
 
-		bool is_type = typeIdentifier(vec);
+		// auto it = vec.begin();
+		bool is_type = isType(vec[0]);
 
 		if(is_type)
 		{
+			createVariable(vec);
 			// std::cout << "{ " << vec[0] << " } it's a declaration => gotta handle the operation" << std::endl;
 			if (vec.begin() + 2 == vec.end())
 			{
 				displayOutput(false, "NONE ( " + vec[1] + " declaration )");
 				continue ;
 			}
-			// handleOperation(vec, vec.begin() + 2);
+			if (vec[2] != "=")
+				throw std::invalid_argument("wrong operation: " + vec[2]);
 		}
+		handleManipulation(vec, vec.begin() + 2);
 		// else
-			// std::cout << "not a declaration => existing var/loop/function/invalid" << std::endl;
+			// existing var/loop/function/invalid
 	}
 
 
 
 }
 
-bool	LatinScript::typeIdentifier(const std::vector<std::string>& vec)
+bool	LatinScript::createVariable(const std::vector<std::string>& vec)
 {
 	if (vec.size() < 2)
 		throw std::invalid_argument("syntax error");
@@ -71,13 +75,15 @@ bool	LatinScript::typeIdentifier(const std::vector<std::string>& vec)
 		else
 			throw std::invalid_argument("variable redefinition: " + vec[1]);
 	}
+	
 	return false;
 }
 
-// void	LatinScript::handleOperation(const svector& vec, const_iterator it)
-// {
-	
-// }
+void	LatinScript::handleManipulation(const svector& vec, const_iterator it)
+{
+	(void) vec;
+	(void) it;
+}
 
 LatinScript::~LatinScript()
 {

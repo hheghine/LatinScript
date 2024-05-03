@@ -37,6 +37,26 @@ using svector = std::vector<std::string>;
 using iterator = svector::iterator;
 using const_iterator = svector::const_iterator;
 
+/*---------------ENUM CLASS---------------*/
+
+enum class operators : char {
+	ASSIGNMENT	= '=',
+	PLUS		= '+',
+	MINUS		= '-',
+	MULTIPLY	= '*',
+	DIVIDE		= '/'
+};
+
+/*--------------OPERATOR MAP--------------*/
+
+const std::unordered_map<std::string, operators> operator_map = {
+	{"=", operators::ASSIGNMENT},
+	{"+", operators::PLUS},
+	{"-", operators::MINUS},
+	{"*", operators::MULTIPLY},
+	{"/", operators::DIVIDE}
+};
+
 /*----------------MESSAGES----------------*/
 
 inline static void	usage()
@@ -66,7 +86,11 @@ inline static void	displayOutput(bool flag, const std::string& message)
 
 svector	splitLine(const std::string& line);
 
-bool	isOperator(const std::string& key);
+bool		isAssignment(const std::string& key);
+bool		isOperator(const std::string& key);
+bool		isType(const std::string& statement);
+bool		isLoop(const std::string& statement);
+bool		isCondition(const std::string& statement);
 
 /*-----------LATIN-SCRIPT CLASS-----------*/
 
@@ -79,8 +103,8 @@ class LatinScript {
 		~LatinScript();
 
 		void	letsGo(const std::string& filename);
-		bool	typeIdentifier(const svector& vec);
-		// void	handleOperation(const svector& vec, const_iterator it);
+		bool	createVariable(const svector& vec);
+		void	handleManipulation(const svector& vec, const_iterator it);
 };
 
 
