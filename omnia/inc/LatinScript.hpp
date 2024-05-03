@@ -10,7 +10,6 @@
 # include <fstream>
 # include <exception>
 
-// # include "Object.hpp"
 # include "Numerus.hpp"
 
 namespace ls
@@ -32,6 +31,12 @@ const char* const MAIN = "\033[38;2;153;1;102m";
 
 const char* const CRST = "\033[0m";
 
+/*-----------------ALIASES-----------------*/
+
+using svector = std::vector<std::string>;
+using iterator = svector::iterator;
+using const_iterator = svector::const_iterator;
+
 /*----------------MESSAGES----------------*/
 
 inline static void	usage()
@@ -42,9 +47,26 @@ inline static void	usage()
 	<< ls::CRST << std::endl;
 }
 
+inline static void	displayInput(const svector& vec)
+{
+	std::cout << BGRY << "[ INPUT  ]\t" << WHT;
+
+	for (auto it = vec.begin(); it != vec.end(); ++it)
+		std::cout << *it << " ";
+	std::cout << CRST << std::endl;
+}
+
+inline static void	displayOutput(bool flag, const std::string& message)
+{
+	std::cout << BGRY << "[ OUTPUT ]\t" << \
+	(flag ? MAIN : GRY) << message << CRST << std::endl;
+}
+
 /*------------------UTILS------------------*/
 
-std::vector<std::string>	splitLine(const std::string& line);
+svector	splitLine(const std::string& line);
+
+bool	isOperator(const std::string& key);
 
 /*-----------LATIN-SCRIPT CLASS-----------*/
 
@@ -57,7 +79,8 @@ class LatinScript {
 		~LatinScript();
 
 		void	letsGo(const std::string& filename);
-		bool	typeIdentifier(const std::vector<std::string>& vec);
+		bool	typeIdentifier(const svector& vec);
+		// void	handleOperation(const svector& vec, const_iterator it);
 };
 
 

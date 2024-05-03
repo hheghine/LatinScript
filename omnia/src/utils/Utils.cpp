@@ -1,6 +1,6 @@
 #include "LatinScript.hpp"
 
-std::vector<std::string> ls::splitLine(const std::string& line)
+ls::svector	ls::splitLine(const std::string& line)
 {
 	std::stringstream ss(line);
 
@@ -10,4 +10,10 @@ std::vector<std::string> ls::splitLine(const std::string& line)
 	while (ss >> word)
 		vec.push_back(word);
 	return vec;
+}
+
+bool	ls::isOperator(const std::string& key)
+{
+	return (key == "=" || key == "+" || key == "-" \
+			|| key == "*" || key == "/");
 }

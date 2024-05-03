@@ -1,8 +1,10 @@
 #include "Numerus.hpp"
 
 Numerus::Numerus()
-	: Object("numerus", new int{}, 0)
-{}
+	: Object("numerus", new int{0}, 0)
+{
+	links = 1;
+}
 
 Numerus::Numerus(Object* ptr)
 	: Object("numerus", new int{}, 0)

@@ -4,7 +4,13 @@ using namespace ls;
 
 LatinScript::LatinScript(const std::string& filename)
 {
-	letsGo(filename);
+	try {
+		letsGo(filename);
+	} catch (const std::exception& e) {
+		std::cout << ls::MAIN << "[ " << ls::RED << "✘" \
+		<< ls::MAIN << " ] " << "exeption: " << e.what() \
+		<< ls::CRST << std::endl;
+	}
 }
 
 void	LatinScript::letsGo(const std::string& filename)
@@ -24,17 +30,29 @@ void	LatinScript::letsGo(const std::string& filename)
 
 	while (std::getline(file, line))
 	{
-		std::vector<std::string> vec = splitLine(line);
+		svector vec = splitLine(line);
 		if (vec.empty())
 			continue;
+
+		displayInput(vec);
 
 		bool is_type = typeIdentifier(vec);
 
 		if(is_type)
-			std::cout << "{ " << vec[0] << " } it's a type => gotta handle the operation" << std::endl;
-		else
-			std::cout << "not a type => loop/function/invalid" << std::endl;
+		{
+			// std::cout << "{ " << vec[0] << " } it's a declaration => gotta handle the operation" << std::endl;
+			if (vec.begin() + 2 == vec.end())
+			{
+				displayOutput(false, "NONE ( " + vec[1] + " declaration )");
+				continue ;
+			}
+			// handleOperation(vec, vec.begin() + 2);
+		}
+		// else
+			// std::cout << "not a declaration => existing var/loop/function/invalid" << std::endl;
 	}
+
+
 
 }
 
@@ -44,12 +62,22 @@ bool	LatinScript::typeIdentifier(const std::vector<std::string>& vec)
 		throw std::invalid_argument("syntax error");
 	if (vec[0] == "numerus")
 	{
-		vars[vec[1]] = new Numerus();
-		objects.insert(vars[vec[1]]);
-		return true;
+		if (vars.find(vec[1]) == vars.end())
+		{
+			vars[vec[1]] = new Numerus();
+			objects.insert(vars[vec[1]]);
+			return true;
+		}
+		else
+			throw std::invalid_argument("variable redefinition: " + vec[1]);
 	}
 	return false;
 }
+
+// void	LatinScript::handleOperation(const svector& vec, const_iterator it)
+// {
+	
+// }
 
 LatinScript::~LatinScript()
 {

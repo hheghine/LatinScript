@@ -8,12 +8,7 @@ int	main(int ac, char **av)
 		return 0;
 	}
 
-	try {
-		ls::LatinScript{av[1]};
-	} catch (const std::exception& e) {
-		std::cout << ls::MAIN << "[ " << ls::RED << "✘" \
-		<< ls::MAIN << " ] " << "exeption: " << e.what() \
-		<< ls::CRST << std::endl;
-	}
+	ls::LatinScript script(av[1]);
 
+	return 0;
 }
