@@ -6,15 +6,15 @@ Object::Object(const std::string& type, void* value, int links)
 	, links{links}
 {}
 
-void	Object::setValue(void* ptr)
-{
-	(void)ptr;
-}
+// void	Object::setValue(void* ptr)
+// {
+// 	(void)ptr;
+// }
 
-std::string	Object::__string() const
-{
-	return "ignōtus (undefined)";
-}
+// std::string	Object::__string() const
+// {
+// 	return "ignōtus (undefined)";
+// }
 
 std::ostream&	operator<< (std::ostream& os, const Object& ob)
 {

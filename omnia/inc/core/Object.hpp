@@ -13,8 +13,9 @@ public:
 	Object(const std::string& type, void* value, int links);
 	virtual ~Object() {}
 
-	virtual void		setValue(void* ptr);
-	virtual std::string __string() const;
+	virtual	void		setValue(const std::string& rhs) = 0;
+	virtual void		setValue(void* ptr) = 0;
+	virtual std::string __string() const = 0;
 };
 
 std::ostream&	operator<< (std::ostream& os, const Object& ob);

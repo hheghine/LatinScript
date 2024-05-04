@@ -118,13 +118,9 @@ void	LatinScript::handleAssignment(const svector& vec, const_iterator it)
 	if (it == vec.end())
 		throw std::invalid_argument("invalid assignment operation");
 
-	if (std::isdigit((*it)[0]) || (*it)[0] == '-' || (*it)[0] == '+')
-	{
-		vars[*(it - 2)]->setValue(new int(toInt(*it)));
-		// delete (int *)vars[*(it - 2)]->value; // HARDCODE!! FIX!!!
-		// vars[*(it - 2)]->value = new int(toInt(*it));
-	}
-	else if (vars.find(*it) != vars.end() && \
+	// if (std::isdigit((*it)[0]) || (*it)[0] == '-' || (*it)[0] == '+')
+	// 	vars[*(it - 2)]->setValue(new int(toInt(*it)));
+	if (vars.find(*it) != vars.end() && \
 		vars[*(it - 2)]->type == vars[*it]->type)
 	{
 		if (vars[*(it - 2)]->links == 1)
@@ -135,6 +131,8 @@ void	LatinScript::handleAssignment(const svector& vec, const_iterator it)
 		vars[*(it - 2)] = vars[*it];
 		vars[*it]->links ++;
 	}
+	else
+		vars[*(it - 2)]->setValue(*it);
 
 }
 

@@ -32,7 +32,8 @@ SRC_FILES	= $(addprefix $(SRCS_DIR), main.cpp LatinScript.cpp) \
 				$(addprefix $(CORE_DIR), Object.cpp Numerus.cpp)
 
 INCLUDES	=	-Iomnia/inc \
-					-Iomnia/inc/core
+					-Iomnia/inc/core \
+					-Iomnia/inc/utils
 
 CXX			= @c++
 CXXFLAGS 	= -g3 -Wall -Wextra -Werror $(INCLUDES) -fsanitize=address
