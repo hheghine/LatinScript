@@ -40,6 +40,20 @@ bool	ls::isOperator(const std::string& key)
 			|| key == "*" || key == "/");
 }
 
+bool	ls::varNameCheck(const std::string& name)
+{
+	for (auto it = ls::reserved.begin(); it != ls::reserved.end(); ++it)
+		if (name == *it)
+			return false;
+
+	if ((name[0] >= 65 && name[0] <= 90) || \
+		(name[0] >= 97 && name[0] <= 122) || \
+		name[0] == '_')
+		return true;
+
+	return false;
+}
+
 int	ls::toInt(const std::string& str)
 {
 	std::stringstream ss(str);
@@ -51,35 +65,51 @@ int	ls::toInt(const std::string& str)
 	return val;
 }
 
-std::string	ls::extractString(const std::string& line, char key)
+std::string ls::extractString(const std::string& line, char key)
 {
-	std::string::const_iterator start;
-	std::string::const_iterator end;
+	std::string extracted;
 	bool opened = false;
 
 	for (auto it = line.begin(); it != line.end(); ++it)
 	{
 		if (*it == key && !opened)
 		{
-			start = it + 1;
 			opened = true;
-			continue ;
+			continue;
 		}
 		if (*it == key)
+			return extracted;
+		if (opened)
 		{
-			end = it;
-			it ++;
-			while (it != line.end() && (*(it) == ' ' ||  *(it) == '\t'))
-				it ++;
-			if (it != line.end())
-				throw std::invalid_argument("wrong syntax: " + line);
-			return std::string(start, end);
+			if (*it == '\\')
+			{
+				++it;
+				if (it == line.end())
+					throw std::invalid_argument("wrong syntax: " + line);
+				switch (*it)
+				{
+					case 'n':
+						extracted += '\n';
+						break;
+					case '\t':
+						extracted += '\t';
+						break;
+					default:
+						extracted += *it;
+						break;
+				}
+			}
+			else
+			{
+				extracted += *it;
+			}
 		}
 	}
 	throw std::invalid_argument("wrong syntax: " + line);
 }
 
-std::string::const_iterator	ls::search(std::string::const_iterator start, std::string::const_iterator end, char key)
+std::string::const_iterator	ls::search(std::string::const_iterator start, \
+										std::string::const_iterator end, char key)
 {
 	std::string::const_iterator it;
 

@@ -7,6 +7,10 @@ scribere << y
 x = y
 
 scribere << x
-scribere << *hello*
+
+x = 42
+
+scribere << y
+scribere << *hello\\\n*
 
 dum < x == 5 >

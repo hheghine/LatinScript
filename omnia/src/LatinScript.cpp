@@ -76,17 +76,14 @@ void	LatinScript::createVariable(const std::vector<std::string>& vec)
 {
 	if (vec.size() < 2)
 		throw std::invalid_argument("syntax error");
-	if (std::isdigit(vec[1][0])) // ADD PROPER VARIABLE NAME CHECK
+	if (!varNameCheck(vec[1]))
 		throw std::invalid_argument("invalid variable name: " + vec[1]);
+	if (vars.find(vec[1]) != vars.end())
+			throw std::invalid_argument("redefinition: " + vec[1]);
 	if (vec[0] == "numerus")
 	{
-		if (vars.find(vec[1]) == vars.end())
-		{
-			vars[vec[1]] = new Numerus();
-			objects.insert(vars[vec[1]]);
-		}
-		else
-			throw std::invalid_argument("variable redefinition: " + vec[1]);
+		vars[vec[1]] = new Numerus();
+		objects.insert(vars[vec[1]]);
 	}
 }
 
@@ -123,8 +120,9 @@ void	LatinScript::handleAssignment(const svector& vec, const_iterator it)
 
 	if (std::isdigit((*it)[0]) || (*it)[0] == '-' || (*it)[0] == '+')
 	{
-		delete (int *)vars[*(it - 2)]->value; // HARDCODE!! FIX!!!
-		vars[*(it - 2)]->value = new int(toInt(*it));
+		vars[*(it - 2)]->setValue(new int(toInt(*it)));
+		// delete (int *)vars[*(it - 2)]->value; // HARDCODE!! FIX!!!
+		// vars[*(it - 2)]->value = new int(toInt(*it));
 	}
 	else if (vars.find(*it) != vars.end() && \
 		vars[*(it - 2)]->type == vars[*it]->type)

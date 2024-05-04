@@ -28,7 +28,7 @@ const char* const BGRN = "\033[1;32m";
 const char* const BCYN = "\033[1;36m";
 const char* const BGRY = "\033[1;90m";
 
-const char* const MAIN = "\033[38;2;153;1;102m";
+const char* const MAIN = "\033[38;2;63;0;191m";
 
 const char* const CRST = "\033[0m";
 
@@ -56,6 +56,18 @@ const std::unordered_map<std::string, operators> operator_map = {
 	{"-", operators::MINUS},
 	{"*", operators::MULTIPLY},
 	{"/", operators::DIVIDE}
+};
+
+/*-------------RESERVED NAMES-------------*/
+
+const svector reserved = {
+	{"numerus"},	/* int		*/
+	{"filum"},		/* string	*/
+	{"verum"},		/* bool		*/
+	{"duplus"},		/* double	*/
+	{"dum"},		/* while	*/
+	{"scribere"},	/* cout		*/
+	{"arredo"}		/* array	*/
 };
 
 /*----------------MESSAGES----------------*/
@@ -86,19 +98,21 @@ inline static void	displayOutput(bool flag, const std::string& message)
 
 /*------------------UTILS------------------*/
 
-svector	splitLine(const std::string& line);
+svector		splitLine(const std::string& line);
 
 bool		isAssignment(const std::string& key);
 bool		isOperator(const std::string& key);
 bool		isType(const std::string& statement);
 bool		isLoop(const std::string& statement);
 bool		isCondition(const std::string& statement);
+bool		varNameCheck(const std::string& name);
 
-int	toInt(const std::string& str);
+int			toInt(const std::string& str);
 
-std::string::const_iterator	search(std::string::const_iterator start, std::string::const_iterator end, char key);
 
-std::string	extractString(const std::string& line, char key);
+std::string::const_iterator	search(std::string::const_iterator start, \
+									std::string::const_iterator end, char key);
+std::string					extractString(const std::string& line, char key);
 
 /*-----------LATIN-SCRIPT CLASS-----------*/
 

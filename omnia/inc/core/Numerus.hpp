@@ -11,6 +11,7 @@ class Numerus : public Object {
 		Numerus(Object* ptr);
 		~Numerus();
 
+		void		setValue(void* ptr);
 		std::string	__string() const;
 };
 

@@ -13,6 +13,12 @@ Numerus::Numerus(Object* ptr)
 		*(int *)value = *(int *)ptr->value;
 }
 
+void	Numerus::setValue(void* ptr)
+{
+	delete (int *)this->value;
+	this->value = (int *)ptr;
+}
+
 std::string	Numerus::__string() const
 {
 	return std::to_string(*((int *)value));

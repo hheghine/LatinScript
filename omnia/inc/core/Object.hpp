@@ -13,6 +13,7 @@ public:
 	Object(const std::string& type, void* value, int links);
 	virtual ~Object() {}
 
+	virtual void		setValue(void* ptr);
 	virtual std::string __string() const;
 };
 
