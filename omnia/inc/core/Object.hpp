@@ -15,6 +15,10 @@ public:
 
 	virtual	void		setValue(const std::string& rhs) = 0;
 	virtual void		setValue(void* ptr) = 0;
+
+	virtual void		addition(const std::string& rhs) = 0;
+	virtual void		addition(const Object* ob) = 0;
+
 	virtual std::string __string() const = 0;
 };
 

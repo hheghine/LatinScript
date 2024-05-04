@@ -48,6 +48,8 @@ all : $(NAME)
 
 $(NAME) : $(OBJS_DIR) $(OBJS) Makefile
 	$(CXX) $(CXXFLAGS) $(OBJS) -o $(NAME)
+	@printf "$(LINE_COLORS_3)%15s Compilation of $(NAME) terminated $(END)$(LINE_COLORS_1)\
+	$(BLINK)[$(LINE_COLORS_6)$(BLINK)success$(BLINK)$(LINE_COLORS_1)]$(END)\n\n"
 	
 $(OBJS_DIR) :
 	@$(PRINT_NAME)
@@ -55,13 +57,9 @@ $(OBJS_DIR) :
 	@mkdir -p $(OBJS_DIR)/$(SRCS_DIR)
 	@mkdir -p $(OBJS_DIR)/$(CORE_DIR)
 	@mkdir -p $(OBJS_DIR)/$(UTILS_DIR)
-	@sleep 0.1
-	@printf "$(LINE_COLORS_3)%15s Compilation of $(NAME) terminated $(END)$(LINE_COLORS_1)\
-	$(BLINK)[$(LINE_COLORS_6)$(BLINK)success$(BLINK)$(LINE_COLORS_1)]$(END)\n\n"
 
 $(OBJS) : $(OBJS_DIR)/%.o : %.cpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@
-
 
 clean :
 	@rm -rf $(OBJS_DIR)

@@ -36,6 +36,22 @@ void	Numerus::setValue(void* ptr)
 	this->value = (int *)ptr;
 }
 
+void	Numerus::addition(const std::string& rhs)
+{
+	if (std::isdigit(rhs[0]) || rhs[0] == '-' || rhs[0] == '+')
+		*(int *)value += toInt(rhs);
+	else
+		throw std::invalid_argument("invalid argument: " + rhs);
+}
+
+void	Numerus::addition(const Object* ob)
+{
+	if (ob->type == this->type)
+		*(int *)value = *((int *)ob->value);
+	else
+		throw std::invalid_argument("invalid argument type: " + ob->type);
+}
+
 std::string	Numerus::__string() const
 {
 	return std::to_string(*((int *)value));

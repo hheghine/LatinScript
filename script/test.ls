@@ -2,6 +2,10 @@
 numerus x
 numerus y = -1
 
+x = y
+
+x = 3 + 4 + 5
+
 scribere << y
 
 < x == y >

@@ -127,8 +127,9 @@ class LatinScript {
 		void	letsGo(const std::string& filename);
 		void	createVariable(const svector& vec);
 		void	handleStatement(const svector& vec, const_iterator it);
-		void	handleOperator(const svector& vec, const_iterator it);
-		void	handleAssignment(const svector& vec, const_iterator it);
+		void	handleOperator(const svector& vec, const_iterator lhs, const_iterator& it);
+		void	handleAssignment(const svector& vec, const_iterator lhs, const_iterator& it);
+		void	handleAddition(const svector& vec, const_iterator lhs, const_iterator& it);
 		void	handleOutput(const svector& vec, const std::string& line);
 };
 

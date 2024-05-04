@@ -90,73 +90,90 @@ void	LatinScript::createVariable(const std::vector<std::string>& vec)
 void	LatinScript::handleStatement(const svector& vec, const_iterator it)
 {
 	if (isOperator(*it))
-		handleOperator(vec, it);
+		handleOperator(vec, it - 1, it);
 }
 
-void	LatinScript::handleOperator(const svector& vec, const_iterator it)
+void	LatinScript::handleOperator(const svector& vec, const_iterator lhs, const_iterator& it)
 {
-	auto op = operator_map.find(*it);
+	if (vars.find(*(it - 1)) == vars.end())
+		throw std::invalid_argument("invalid assignment: " + *(it - 1));
 
-	switch(op->second)
+	for (auto iter = it; iter != vec.end(); ++iter)
 	{
-		case operators::ASSIGNMENT:
-			handleAssignment(vec, it + 1);
-			break ;
-		case operators::PLUS:
-			break ;
-		case operators::MINUS:
-			break ;
-		case operators::MULTIPLY:
-			break ;
-		case operators::DIVIDE:
-			break ;
+		auto op = operator_map.find(*iter);
+		if (op == operator_map.end())
+			throw std::invalid_argument("unknown operator: " + *iter);
+
+
+		switch(op->second)
+		{
+			case operators::ASSIGNMENT :
+				handleAssignment(vec, lhs, ++iter);
+				break ;
+			case operators::PLUS :
+				handleAddition(vec, lhs, ++iter);
+				break ;
+			case operators::MINUS :
+				break ;
+			case operators::MULTIPLY :
+				break ;
+			case operators::DIVIDE :
+				break ;
+		}
 	}
 }
 
-void	LatinScript::handleAssignment(const svector& vec, const_iterator it)
+void	LatinScript::handleAssignment(const svector& vec, const_iterator lhs, const_iterator& it)
 {
 	if (it == vec.end())
 		throw std::invalid_argument("invalid assignment operation");
 
-	// if (std::isdigit((*it)[0]) || (*it)[0] == '-' || (*it)[0] == '+')
-	// 	vars[*(it - 2)]->setValue(new int(toInt(*it)));
 	if (vars.find(*it) != vars.end() && \
-		vars[*(it - 2)]->type == vars[*it]->type)
+		vars[*lhs]->type == vars[*it]->type)
 	{
-		if (vars[*(it - 2)]->links == 1)
+		if (vars[*lhs]->links == 1)
 		{
-			objects.erase(vars[*(it - 2)]);
-			delete vars[*(it - 2)];
+			objects.erase(vars[*lhs]);
+			delete vars[*lhs];
 		}
-		vars[*(it - 2)] = vars[*it];
+		vars[*lhs] = vars[*it];
 		vars[*it]->links ++;
 	}
 	else
-		vars[*(it - 2)]->setValue(*it);
+		vars[*lhs]->setValue(*it);
+}
 
+void	LatinScript::handleAddition(const svector& vec, const_iterator lhs, const_iterator& it)
+{
+	if (it == vec.end())
+		throw std::invalid_argument("wrong operation: " + *(it - 1));
+	
+	if (vars.find(*it) != vars.end())
+		vars[*lhs]->addition(vars[*it]);
+	else
+		vars[*lhs]->addition(*it);
 }
 
 void	LatinScript::handleOutput(const svector& vec, const std::string& line)
 {
 	auto it = vec.begin();
 
-	if (*it == "scribere" && *(it + 1) == "<<")
+	if (it + 1 == vec.end() || *(it + 1) != "<<")
+	throw std::invalid_argument("invalid input or nothing to output: " + *(it + 1));
+	if (search(line.begin(), line.end(), '*') != line.end())
 	{
-		if (search(line.begin(), line.end(), '*') != line.end())
-		{
-			std::string output = extractString(line, '*');
-			displayOutput(true, output);
-			_output = true;
-			return ;
-		}
-		else if (vars.find(vec[2]) != vars.end())
-		{
-			displayOutput(true, vars[vec[2]]->__string());
-			_output = true;
-		}
-		else
-			throw std::invalid_argument("invalid input or nothing to output: " + vec[2]);
+		std::string output = extractString(line, '*');
+		displayOutput(true, output);
+		_output = true;
+		return ;
 	}
+	else if (vars.find(vec[2]) != vars.end())
+	{
+		displayOutput(true, vars[vec[2]]->__string());
+		_output = true;
+	}
+	else
+		throw std::invalid_argument("invalid input or nothing to output: " + vec[2]);
 }
 
 LatinScript::~LatinScript()

@@ -14,6 +14,10 @@ class Numerus : public Object {
 
 		void		setValue(const std::string& rhs);
 		void		setValue(void* ptr);
+
+		void		addition(const std::string& rhs);
+		void		addition(const Object* ob);
+
 		std::string	__string() const;
 };
 
