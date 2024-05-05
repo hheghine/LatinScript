@@ -3,6 +3,8 @@
 using namespace ls;
 
 static bool _output;
+static bool _chainedOperations;
+static bool _isAssignment;
 
 LatinScript::LatinScript(const std::string& filename)
 {
@@ -100,16 +102,30 @@ void	LatinScript::handleOperator(const svector& vec, const_iterator lhs, const_i
 	if (vars.find(*(it - 1)) == vars.end())
 		throw std::invalid_argument("invalid assignment: " + *(it - 1));
 
+	_chainedOperations = false;
+	_isAssignment = false;
+	const_iterator final_lhs;
+
 	for (auto iter = it; iter != vec.end(); ++iter)
 	{
 		auto op = operator_map.find(*iter);
 		if (op == operator_map.end())
 			throw std::invalid_argument("unknown operator: " + *iter);
 
-
 		switch(op->second)
 		{
 			case operators::ASSIGNMENT :
+				_isAssignment = true;
+				/* if there's a chain of operations, creating a temporary object to
+				store the non-final value and then assigning the final value to actual lhs */
+				if (iter + 1 != vec.end() && iter + 2 != vec.end()
+				&& vars.find(*(iter - 1)) != vars.end())
+				{
+					Object* tmp = vars[*(iter - 1)]->clone();
+					vars["tmp"] = tmp;
+					final_lhs = lhs;
+					_chainedOperations = true;
+				}
 				handleAssignment(vec, lhs, ++iter);
 				break ;
 			case operators::PLUS :
@@ -123,6 +139,14 @@ void	LatinScript::handleOperator(const svector& vec, const_iterator lhs, const_i
 				break ;
 		}
 	}
+	/* assigning the final value to actual lhs */
+	if (_chainedOperations)
+	{
+		vars[*final_lhs]->setValue(vars["tmp"]);
+		delete vars["tmp"];
+		vars.erase("tmp");
+		_chainedOperations = false;
+	}
 }
 
 void	LatinScript::handleAssignment(const svector& vec, const_iterator lhs, const_iterator& it)
@@ -130,30 +154,37 @@ void	LatinScript::handleAssignment(const svector& vec, const_iterator lhs, const
 	if (it == vec.end())
 		throw std::invalid_argument("invalid assignment operation");
 
+	std::string toChange = _chainedOperations ? "tmp" : *lhs;
+
 	if (vars.find(*it) != vars.end() && \
-		vars[*lhs]->type == vars[*it]->type)
+		vars[toChange]->type == vars[*it]->type)
 	{
-		if (vars[*lhs]->links == 1)
+		if (vars[toChange]->links == 1)
 		{
-			objects.erase(vars[*lhs]);
-			delete vars[*lhs];
+			objects.erase(vars[toChange]);
+			delete vars[toChange];
 		}
-		vars[*lhs] = vars[*it];
+		vars[toChange] = vars[*it];
 		vars[*it]->links ++;
 	}
 	else
-		vars[*lhs]->setValue(*it);
+		vars[toChange]->setValue(*it);
 }
 
 void	LatinScript::handleAddition(const svector& vec, const_iterator lhs, const_iterator& it)
 {
 	if (it == vec.end())
 		throw std::invalid_argument("wrong operation: " + *(it - 1));
-	
-	if (vars.find(*it) != vars.end())
-		vars[*lhs]->addition(vars[*it]);
-	else
-		vars[*lhs]->addition(*it);
+
+	if (_isAssignment)
+	{
+		std::string toChange = _chainedOperations ? "tmp" : *lhs;
+
+		if (vars.find(*it) != vars.end())
+			vars[toChange]->addition(vars[*it]);
+		else
+			vars[toChange]->addition(*it);
+	}
 }
 
 void	LatinScript::handleOutput(const svector& vec, const std::string& line)

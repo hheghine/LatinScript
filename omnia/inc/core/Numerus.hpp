@@ -12,11 +12,17 @@ class Numerus : public Object {
 		Numerus(Object* ptr);
 		~Numerus();
 
-		void		setValue(const std::string& rhs);
-		void		setValue(void* ptr);
+		void	setValue(const Object* rhs);
+		void	setValue(const std::string& rhs);
+		void	setValue(void* ptr);
 
-		void		addition(const std::string& rhs);
-		void		addition(const Object* ob);
+		void	addition(const std::string& rhs);
+		void	addition(const Object* ob);
+
+		void	substraction(const std::string& rhs);
+		void	substraction(const Object* ob);
+
+		Object*	clone() const;
 
 		std::string	__string() const;
 };

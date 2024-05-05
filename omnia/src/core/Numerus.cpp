@@ -24,6 +24,16 @@ Numerus::Numerus(Object* ptr)
 		*(int *)value = *(int *)ptr->value;
 }
 
+void	Numerus::setValue(const Object* rhs)
+{
+	if (rhs->value)
+	{
+		if (this->value)
+			delete (int *)this->value;
+		this->value = new int(*((int *)rhs->value));
+	}
+}
+
 void	Numerus::setValue(const std::string& rhs)
 {
 	if (std::isdigit(rhs[0]) || rhs[0] == '-' || rhs[0] == '+')
@@ -32,8 +42,9 @@ void	Numerus::setValue(const std::string& rhs)
 
 void	Numerus::setValue(void* ptr)
 {
-	delete (int *)this->value;
-	this->value = (int *)ptr;
+	if (this->value)
+		delete (int *)this->value;
+	this->value = ptr;
 }
 
 void	Numerus::addition(const std::string& rhs)
@@ -47,9 +58,16 @@ void	Numerus::addition(const std::string& rhs)
 void	Numerus::addition(const Object* ob)
 {
 	if (ob->type == this->type)
-		*(int *)value = *((int *)ob->value);
+	{
+		*(int *)value += *((int *)ob->value);
+	}
 	else
 		throw std::invalid_argument("invalid argument type: " + ob->type);
+}
+
+Object*	Numerus::clone() const
+{
+	return new Numerus();
 }
 
 std::string	Numerus::__string() const

@@ -4,10 +4,21 @@ numerus y = -1
 
 x = y
 
-x = 3 + 4 + 5
+x = 3 + y + 4 + 5 + x
+
+scribere << x
+
+x = -3 + y
+
+scribere << x
+
+x + 1
+
+scribere << x
 
 scribere << *bla* << y << *aa* << x << *bb*
 
+################ this is IF
 #< x == y >
 ################ this is ELSE IF
 # << x == 5 >
