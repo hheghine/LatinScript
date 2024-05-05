@@ -65,49 +65,6 @@ int	ls::toInt(const std::string& str)
 	return val;
 }
 
-std::string ls::extractString(const std::string& line, char key)
-{
-	std::string extracted;
-	bool opened = false;
-
-	for (auto it = line.begin(); it != line.end(); ++it)
-	{
-		if (*it == key && !opened)
-		{
-			opened = true;
-			continue;
-		}
-		if (*it == key)
-			return extracted;
-		if (opened)
-		{
-			if (*it == '\\')
-			{
-				++it;
-				if (it == line.end())
-					throw std::invalid_argument("wrong syntax: " + line);
-				switch (*it)
-				{
-					case 'n':
-						extracted += '\n';
-						break;
-					case '\t':
-						extracted += '\t';
-						break;
-					default:
-						extracted += *it;
-						break;
-				}
-			}
-			else
-			{
-				extracted += *it;
-			}
-		}
-	}
-	throw std::invalid_argument("wrong syntax: " + line);
-}
-
 std::string::const_iterator	ls::search(std::string::const_iterator start, \
 										std::string::const_iterator end, char key)
 {
@@ -119,22 +76,20 @@ std::string::const_iterator	ls::search(std::string::const_iterator start, \
 	return end;
 }
 
-std::string::const_iterator ls::search(std::string::const_iterator start, std::string::const_iterator end, const std::string& key)
+std::string::const_iterator ls::search(std::string::const_iterator start, \
+										std::string::const_iterator end, \
+										const std::string& key)
 {
-    auto keyLength = key.length();
-    while (start != end)
-    {
-        auto match = std::search(start, end, key.begin(), key.end());
-        if (match != end)
-        {
-            return match + keyLength;
-        }
-        else
-        {
-            break;
-        }
-    }
-    return end;
+	auto keyLength = key.length();
+	while (start != end)
+	{
+		auto match = std::search(start, end, key.begin(), key.end());
+		if (match != end)
+			return match + keyLength;
+		else
+			break;
+	}
+	return end;
 }
 
 std::string	ls::extractString(std::string::const_iterator start, \
@@ -173,8 +128,6 @@ std::string ls::extractString(std::string::const_iterator start, \
 	return std::string(first + 1, second);
 }
 */
-
-
 
 std::string ls::extractString(std::string::const_iterator start, \
 								std::string::const_iterator end, char key)
