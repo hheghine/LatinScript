@@ -111,8 +111,17 @@ int			toInt(const std::string& str);
 
 
 std::string::const_iterator	search(std::string::const_iterator start, \
-									std::string::const_iterator end, char key);
-std::string					extractString(const std::string& line, char key);
+									std::string::const_iterator end, \
+									char key);
+std::string::const_iterator	search(std::string::const_iterator start, \
+									std::string::const_iterator end, \
+									const std::string& key);
+
+std::string	extractString(const std::string& line, char key);
+std::string	extractString(std::string::const_iterator start, \
+							std::string::const_iterator end, char key);
+std::string	extractString(std::string::const_iterator start, \
+							std::string::const_iterator end);
 
 /*-----------LATIN-SCRIPT CLASS-----------*/
 

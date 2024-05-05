@@ -10,7 +10,7 @@ LatinScript::LatinScript(const std::string& filename)
 		letsGo(filename);
 	} catch (const std::exception& e) {
 		std::cout << ls::MAIN << "[ " << ls::RED << "✘" \
-		<< ls::MAIN << " ]" << "\t\texeption: " << e.what() \
+		<< ls::MAIN << " ]" << "\t\texception: " << e.what() \
 		<< ls::CRST << std::endl;
 	}
 }
@@ -35,7 +35,9 @@ void	LatinScript::letsGo(const std::string& filename)
 		_output = false;
 		svector vec = splitLine(line);
 		if (vec.empty())
-			continue;
+			continue ;
+		if (line[0] == '#')
+			continue ;
 
 		displayInput(vec);
 
@@ -156,24 +158,33 @@ void	LatinScript::handleAddition(const svector& vec, const_iterator lhs, const_i
 
 void	LatinScript::handleOutput(const svector& vec, const std::string& line)
 {
-	auto it = vec.begin();
+	if (vec.begin() + 1 == vec.end() || *(vec.begin() + 1) != "<<")
+		throw std::invalid_argument("invalid input or nothing to output: " + *(line.begin() + 1));
 
-	if (it + 1 == vec.end() || *(it + 1) != "<<")
-	throw std::invalid_argument("invalid input or nothing to output: " + *(it + 1));
-	if (search(line.begin(), line.end(), '*') != line.end())
+	std::string output;
+	std::string::const_iterator it1 = ls::search(line.begin(), line.end(), "<<");
+	std::string::const_iterator it2;
+
+	while (it1 != line.end())
 	{
-		std::string output = extractString(line, '*');
-		displayOutput(true, output);
-		_output = true;
-		return ;
+		it2 = ls::search(it1 + 1, line.end(), "<<");
+		if (it2 == line.end() && it2 - 1 != line.end() && *(it2 - 1) == '<')
+			throw std::invalid_argument("wrong syntax");
+
+		if (ls::search(it1, it2, '*') != it2)
+			output += extractString(it1, it2, '*');
+		else
+		{
+			std::string var = extractString(it1, it2);
+			if (!var.empty() && vars.find(var) != vars.end())
+				output += vars[var]->__string();
+			else
+				throw std::invalid_argument("invalid input or nothing to output: " + var);
+		}
+		it1 = it2;
 	}
-	else if (vars.find(vec[2]) != vars.end())
-	{
-		displayOutput(true, vars[vec[2]]->__string());
-		_output = true;
-	}
-	else
-		throw std::invalid_argument("invalid input or nothing to output: " + vec[2]);
+	displayOutput(true, output);
+	_output = true;
 }
 
 LatinScript::~LatinScript()

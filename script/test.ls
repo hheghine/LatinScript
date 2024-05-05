@@ -6,15 +6,15 @@ x = y
 
 x = 3 + 4 + 5
 
-scribere << y
+scribere << *bla* << y << *aa* << x << *bb*
 
-< x == y >
-<< x == 5 >
-<<< x == 4 >
+#< x == y >
+################ this is ELSE IF
+# << x == 5 >
+################ this is ELSE
+# <<< x == 4 >
 
-x = y
-
-scribere << x
+#scribere << x
 
 x = 42
 
@@ -22,4 +22,4 @@ scribere << y
 scribere << *hello\\\n*
 
 
-dum < x == 5 >
+#dum < x == 5 >

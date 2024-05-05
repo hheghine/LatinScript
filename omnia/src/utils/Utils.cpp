@@ -113,8 +113,109 @@ std::string::const_iterator	ls::search(std::string::const_iterator start, \
 {
 	std::string::const_iterator it;
 
-	for (it = start; it != end; ++it)
+	for (it = start; it != end - 1; ++it)
 		if (*it == key)
 			return it;
 	return end;
+}
+
+std::string::const_iterator ls::search(std::string::const_iterator start, std::string::const_iterator end, const std::string& key)
+{
+    auto keyLength = key.length();
+    while (start != end)
+    {
+        auto match = std::search(start, end, key.begin(), key.end());
+        if (match != end)
+        {
+            return match + keyLength;
+        }
+        else
+        {
+            break;
+        }
+    }
+    return end;
+}
+
+std::string	ls::extractString(std::string::const_iterator start, \
+										std::string::const_iterator end)
+{
+	std::string res;
+	std::string::const_iterator it;
+
+	while (start != end && *start == ' ')
+	{
+		start ++;
+	}
+	if (start == end)
+		return "";
+	it = start;
+	while (start != end && *start != ' ')
+		start ++;
+
+	return std::string(it, start);
+}
+
+/*
+std::string ls::extractString(std::string::const_iterator start, \
+								std::string::const_iterator end, char key)
+{
+	std::string::const_iterator first = std::find(start, end, key);
+
+	if (first == end)
+        return "";
+
+	std::string::const_iterator second = std::find(first + 1, end, key);
+
+    if (second == end)
+		throw std::invalid_argument("wrong syntax: close the bracket: *");
+
+	return std::string(first + 1, second);
+}
+*/
+
+
+
+std::string ls::extractString(std::string::const_iterator start, \
+								std::string::const_iterator end, char key)
+{
+	std::string extracted;
+	bool opened = false;
+
+	for (auto it = start; it != end; ++it)
+	{
+		if (*it == key && !opened)
+		{
+			opened = true;
+			continue;
+		}
+		if (*it == key)
+			return extracted;
+		if (opened)
+		{
+			if (*it == '\\')
+			{
+				++it;
+				if (it == end)
+					throw std::invalid_argument("wrong syntax: close the bracket: *");
+				switch (*it)
+				{
+					case 'n':
+						extracted += '\n';
+						break;
+					case 't':
+						extracted += '\t';
+						break;
+					default:
+						extracted += *it;
+						break;
+				}
+			}
+			else
+			{
+				extracted += *it;
+			}
+		}
+	}
+	throw std::invalid_argument("wrong syntax: close the bracket: *");
 }
