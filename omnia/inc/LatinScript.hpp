@@ -10,6 +10,9 @@
 # include <filesystem>
 # include <fstream>
 # include <exception>
+# include <ctime>
+# include <iomanip>
+# include <chrono>
 
 # include "Numerus.hpp"
 
@@ -82,7 +85,15 @@ inline static void	usage()
 
 inline static void	displayInput(const svector& vec)
 {
-	std::cout << BGRY << "[ INPUT  ]\t" << GRY;
+	auto now = std::chrono::system_clock::now();
+	auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(\
+											now.time_since_epoch()) % 1000;
+	std::time_t t = std::chrono::system_clock::to_time_t(now);
+	std::tm tm = *std::localtime(&t);
+
+	std::cout << BGRY << "[ " << std::put_time(&tm, "%H:%M:%S") \
+		<< "." << std::setfill('0') << std::setw(3) << ms.count() \
+		<< " | INPUT  ]\t" << GRY;
 
 	for (auto it = vec.begin(); it != vec.end(); ++it)
 		std::cout << *it << " ";
@@ -91,8 +102,17 @@ inline static void	displayInput(const svector& vec)
 
 inline static void	displayOutput(bool flag, const std::string& message)
 {
-	std::cout << MAIN << "[ OUTPUT ]\t";
+	auto now = std::chrono::system_clock::now();
+	auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(\
+											now.time_since_epoch()) % 1000;
+	std::time_t t = std::chrono::system_clock::to_time_t(now);
+	std::tm tm = *std::localtime(&t);
+
+	std::cout << MAIN << "[ " << std::put_time(&tm, "%H:%M:%S") \
+		<< "." << std::setfill('0') << std::setw(3) << ms.count() << " | OUTPUT ]\t";
+
 	flag ? std::cout << MAIN << message : std::cout << GRY << "-";
+
 	std::cout << CRST << std::endl;
 }
 
