@@ -12,11 +12,11 @@ x = -3 + y
 
 scribere << x
 
-x + 1
+numerus z = x + 1
 
-scribere << x
+scribere << *x: * << x << * z: * << z
 
-scribere << *bla* << y << *aa* << x << *bb*
+scribere << *blabla\t* << y << *aa* << x << *bb*
 
 ################ this is IF
 #< x == y >
@@ -25,7 +25,7 @@ scribere << *bla* << y << *aa* << x << *bb*
 ################ this is ELSE
 # <<< x == 4 >
 
-#scribere << x
+scribere << x
 
 x = 42
 

@@ -111,24 +111,6 @@ std::string	ls::extractString(std::string::const_iterator start, \
 	return std::string(it, start);
 }
 
-/*
-std::string ls::extractString(std::string::const_iterator start, \
-								std::string::const_iterator end, char key)
-{
-	std::string::const_iterator first = std::find(start, end, key);
-
-	if (first == end)
-        return "";
-
-	std::string::const_iterator second = std::find(first + 1, end, key);
-
-    if (second == end)
-		throw std::invalid_argument("wrong syntax: close the bracket: *");
-
-	return std::string(first + 1, second);
-}
-*/
-
 std::string ls::extractString(std::string::const_iterator start, \
 								std::string::const_iterator end, char key)
 {

@@ -125,13 +125,21 @@ std::string	extractString(std::string::const_iterator start, \
 /*-----------LATIN-SCRIPT CLASS-----------*/
 
 class LatinScript {
-	public:
-		std::unordered_map<std::string, Object *> vars;
-		std::unordered_set<Object *> objects;
 
+	public:
 		LatinScript(const std::string& filename);
 		~LatinScript();
 
+	private:
+		std::unordered_map<std::string, Object *> vars;
+		std::unordered_set<Object *> objects;
+	
+	private:
+		bool _output;
+		bool _chainedOperations;
+		bool _isAssignment;
+
+	private:
 		void	letsGo(const std::string& filename);
 		void	createVariable(const svector& vec);
 		void	handleStatement(const svector& vec, const_iterator it);

@@ -2,11 +2,10 @@
 
 using namespace ls;
 
-static bool _output;
-static bool _chainedOperations;
-static bool _isAssignment;
-
 LatinScript::LatinScript(const std::string& filename)
+	: _output(false)
+	, _chainedOperations(false)
+	, _isAssignment(false)
 {
 	try {
 		letsGo(filename);
@@ -122,6 +121,8 @@ void	LatinScript::handleOperator(const svector& vec, const_iterator lhs, const_i
 				&& vars.find(*(iter - 1)) != vars.end())
 				{
 					Object* tmp = vars[*(iter - 1)]->clone();
+					// std::cout << (void *)vars["tmp"]->value << std::endl;
+					// std::cout << (void *)vars[*(iter + 1)]->value << std::endl;
 					vars["tmp"] = tmp;
 					final_lhs = lhs;
 					_chainedOperations = true;
@@ -144,7 +145,7 @@ void	LatinScript::handleOperator(const svector& vec, const_iterator lhs, const_i
 	{
 		vars[*final_lhs]->setValue(vars["tmp"]);
 		delete vars["tmp"];
-		vars.erase("tmp");
+		// vars.erase("tmp");
 		_chainedOperations = false;
 	}
 }
@@ -156,17 +157,26 @@ void	LatinScript::handleAssignment(const svector& vec, const_iterator lhs, const
 
 	std::string toChange = _chainedOperations ? "tmp" : *lhs;
 
+	/* another (valid?) object => set the pointer to point that object */
 	if (vars.find(*it) != vars.end() && \
 		vars[toChange]->type == vars[*it]->type)
 	{
-		if (vars[toChange]->links == 1)
+		if (_chainedOperations)
 		{
-			objects.erase(vars[toChange]);
-			delete vars[toChange];
+			vars[toChange]->setValue(vars[*it]);
 		}
-		vars[toChange] = vars[*it];
-		vars[*it]->links ++;
+		else
+		{
+			if (vars[toChange]->links == 1)
+			{
+				objects.erase(vars[toChange]);
+				delete vars[toChange];
+			}
+			vars[toChange] = vars[*it];
+			vars[*it]->links ++;
+		}
 	}
+	/* literal value */
 	else
 		vars[toChange]->setValue(*it);
 }
