@@ -12,18 +12,21 @@ class Numerus : public Object {
 		Numerus(Object* ptr);
 		~Numerus();
 
-		/* allocates a new value that is equal to the value of rhs */
 		void	setValue(const Object* rhs);
-		/* casts rhs and allocates a value */
 		void	setValue(const std::string& rhs);
-		/* gets the allocated value pointer */
 		void	setValue(void* ptr);
 
 		void	addition(const std::string& rhs);
-		void	addition(const Object* ob);
+		void	addition(const Object* rhs);
 
 		void	substraction(const std::string& rhs);
-		void	substraction(const Object* ob);
+		void	substraction(const Object* rhs);
+
+		void	multiplication(const std::string& rhs);
+		void	multiplication(const Object* rhs);
+
+		void	division(const std::string& rhs);
+		void	division(const Object* rhs);
 
 		Object*	clone() const;
 

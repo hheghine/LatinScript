@@ -4,22 +4,26 @@ numerus y = -1
 
 x = y
 
-x = 3 + y + 4 + 5 + x
+x = 3 + y - -4 + 5 - x
 
 scribere << x
 
-x = -3 + y
+x = x / y
 
 scribere << x
 
-numerus z = x + 1
+numerus z = x + 11
 
 scribere << *x: * << x << * z: * << z
+
+z = z * 4 / 3
+
+scribere << z
 
 scribere << *blabla\t* << y << *aa* << x << *bb*
 
 ################ this is IF
-#< x == y >
+# < x == y >
 ################ this is ELSE IF
 # << x == 5 >
 ################ this is ELSE

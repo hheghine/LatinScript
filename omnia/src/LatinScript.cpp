@@ -121,8 +121,7 @@ void	LatinScript::handleOperator(const svector& vec, const_iterator lhs, const_i
 				&& vars.find(*(iter - 1)) != vars.end())
 				{
 					Object* tmp = vars[*(iter - 1)]->clone();
-					// std::cout << (void *)vars["tmp"]->value << std::endl;
-					// std::cout << (void *)vars[*(iter + 1)]->value << std::endl;
+					objects.insert(tmp);
 					vars["tmp"] = tmp;
 					final_lhs = lhs;
 					_chainedOperations = true;
@@ -133,10 +132,13 @@ void	LatinScript::handleOperator(const svector& vec, const_iterator lhs, const_i
 				handleAddition(vec, lhs, ++iter);
 				break ;
 			case operators::MINUS :
+				handleSubstraction(vec, lhs, ++iter);
 				break ;
 			case operators::MULTIPLY :
+				handleMultiplication(vec, lhs, ++iter);
 				break ;
 			case operators::DIVIDE :
+				handleDivision(vec, lhs, ++iter);
 				break ;
 		}
 	}
@@ -144,8 +146,8 @@ void	LatinScript::handleOperator(const svector& vec, const_iterator lhs, const_i
 	if (_chainedOperations)
 	{
 		vars[*final_lhs]->setValue(vars["tmp"]);
+		objects.erase(vars["tmp"]);
 		delete vars["tmp"];
-		// vars.erase("tmp");
 		_chainedOperations = false;
 	}
 }
@@ -194,6 +196,54 @@ void	LatinScript::handleAddition(const svector& vec, const_iterator lhs, const_i
 			vars[toChange]->addition(vars[*it]);
 		else
 			vars[toChange]->addition(*it);
+	}
+}
+
+void	LatinScript::handleSubstraction(const svector& vec, const_iterator lhs, const_iterator& it)
+{
+	if (it == vec.end())
+		throw std::invalid_argument("wrong operation: " + *(it - 1));
+
+	if (_isAssignment)
+	{
+		std::string toChange = _chainedOperations ? "tmp" : *lhs;
+
+		if (vars.find(*it) != vars.end())
+			vars[toChange]->substraction(vars[*it]);
+		else
+			vars[toChange]->substraction(*it);
+	}
+}
+
+void	LatinScript::handleMultiplication(const svector& vec, const_iterator lhs, const_iterator& it)
+{
+	if (it == vec.end())
+		throw std::invalid_argument("wrong operation: " + *(it - 1));
+
+	if (_isAssignment)
+	{
+		std::string toChange = _chainedOperations ? "tmp" : *lhs;
+
+		if (vars.find(*it) != vars.end())
+			vars[toChange]->multiplication(vars[*it]);
+		else
+			vars[toChange]->multiplication(*it);
+	}
+}
+
+void	LatinScript::handleDivision(const svector& vec, const_iterator lhs, const_iterator& it)
+{
+	if (it == vec.end())
+		throw std::invalid_argument("wrong operation: " + *(it - 1));
+
+	if (_isAssignment)
+	{
+		std::string toChange = _chainedOperations ? "tmp" : *lhs;
+
+		if (vars.find(*it) != vars.end())
+			vars[toChange]->division(vars[*it]);
+		else
+			vars[toChange]->division(*it);
 	}
 }
 

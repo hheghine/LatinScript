@@ -166,6 +166,9 @@ class LatinScript {
 		void	handleOperator(const svector& vec, const_iterator lhs, const_iterator& it);
 		void	handleAssignment(const svector& vec, const_iterator lhs, const_iterator& it);
 		void	handleAddition(const svector& vec, const_iterator lhs, const_iterator& it);
+		void	handleSubstraction(const svector& vec, const_iterator lhs, const_iterator& it);
+		void	handleMultiplication(const svector& vec, const_iterator lhs, const_iterator& it);
+		void	handleDivision(const svector& vec, const_iterator lhs, const_iterator& it);
 		void	handleOutput(const svector& vec, const std::string& line);
 };
 

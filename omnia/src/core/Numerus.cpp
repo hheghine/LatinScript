@@ -55,14 +55,60 @@ void	Numerus::addition(const std::string& rhs)
 		throw std::invalid_argument("invalid argument: " + rhs);
 }
 
-void	Numerus::addition(const Object* ob)
+void	Numerus::addition(const Object* rhs)
 {
-	if (ob->type == this->type)
-	{
-		*(int *)value += *((int *)ob->value);
-	}
+	if (rhs->type == this->type)
+		*(int *)value += *((int *)rhs->value);
 	else
-		throw std::invalid_argument("invalid argument type: " + ob->type);
+		throw std::invalid_argument("invalid argument type: " + rhs->type);
+}
+
+void	Numerus::substraction(const std::string& rhs)
+{
+	if (std::isdigit(rhs[0]) || rhs[0] == '-' || rhs[0] == '+')
+		*(int *)value -= toInt(rhs);
+	else
+		throw std::invalid_argument("invalid argument: " + rhs);
+}
+
+void	Numerus::substraction(const Object* rhs)
+{
+	if (rhs->type == this->type)
+		*(int *)value -= *((int *)rhs->value);
+	else
+		throw std::invalid_argument("invalid argument type: " + rhs->type);
+}
+
+void	Numerus::multiplication(const std::string& rhs)
+{
+	if (std::isdigit(rhs[0]) || rhs[0] == '-' || rhs[0] == '+')
+		*(int *)value *= toInt(rhs);
+	else
+		throw std::invalid_argument("invalid argument: " + rhs);
+}
+
+void	Numerus::multiplication(const Object* rhs)
+{
+	if (rhs->type == this->type)
+		*(int *)value *= *((int *)rhs->value);
+	else
+		throw std::invalid_argument("invalid argument type: " + rhs->type);
+}
+
+void	Numerus::division(const std::string& rhs)
+{
+	if (std::isdigit(rhs[0]) || rhs[0] == '-' || rhs[0] == '+')
+		*(int *)value /= toInt(rhs);
+	else
+		throw std::invalid_argument("invalid argument: " + rhs);
+}
+
+void	Numerus::division(const Object* rhs)
+{
+	if (rhs->type == this->type)
+		*(int *)value /= *((int *)rhs->value);
+	else
+		throw std::invalid_argument("invalid argument type: " + rhs->type);
 }
 
 Object*	Numerus::clone() const
