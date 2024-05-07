@@ -323,14 +323,15 @@ void	LatinScript::handleCondition(const svector& vec)
 	else if (vec.at(0) == "<<")
 	{
 		if (!_is_if)
-			throw std::invalid_argument("else if without if condition");
+			throw std::invalid_argument("<< > else if without if condition");
 		_is_if = false;
 		_is_elseif = true;
 	}
 	else if (vec.at(0) == "<<<")
 	{
 		if (!_is_if)
-			throw std::invalid_argument("else without if condition");
+			throw std::invalid_argument("<<< > else without if condition");
+		_is_if = false;
 		_is_elseif = false;
 		_is_else = true;
 	}
@@ -340,7 +341,6 @@ void	LatinScript::handleCondition(const svector& vec)
 	__else = true;
 
 	if (((_is_if || _is_elseif) && vec.size() != 5 && !isConditionOperator(vec.at(2))) || \
-		(_is_else && vec.size() != 2) || \
 		*(vec.end() - 1) != ">")
 		throw std::invalid_argument("wrong condition syntax");
 
@@ -361,12 +361,12 @@ void	LatinScript::handleCondition(const svector& vec)
 			__else = false;
 		}
 	}
-	// else if (__else)
-	// {
-	// 	__if = false;
-	// 	__elseif = false;
-	// 	__else = true;
-	// }
+	else if (__else)
+	{
+		__if = false;
+		__elseif = false;
+		__else = true;
+	}
 }
 
 bool	LatinScript::isConditionTrue(const std::string& op, const std::string& lhs, const std::string& rhs)

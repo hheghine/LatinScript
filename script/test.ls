@@ -34,8 +34,8 @@ scribere << x
 << x == 12 >
 	scribere << *else if condition worked*
 
-#<<< >
-#	scribere << *ELSE !!*
+<<< >
+	scribere << *ELSE !!*
 
 scribere << x
 
