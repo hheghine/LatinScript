@@ -31,6 +31,9 @@ scribere << x
 << x == 1 >
 	scribere << *else if condition worked*
 
+<< x == 12 >
+	scribere << *else if condition worked*
+
 #<<< >
 #	scribere << *ELSE !!*
 

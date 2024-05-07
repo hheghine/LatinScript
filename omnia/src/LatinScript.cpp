@@ -86,10 +86,10 @@ void	LatinScript::letsGo(const std::string& filename)
 		if (vec.empty())
 			continue ;
 		if ((vec[0] == "<<" && __if) || \
+			(vec[0] == "<<" && _is_elseif && __elseif) || \
 			(vec[0] == "<<<" && (__if || __elseif)))
 			_ignore = true;
-		// if (!isCondition(vec[0]) && line[0] != '\t')
-		// 	_ignore = false;
+
 		if (_ignore && (line[0] == '\t' || isCondition(vec[0])))
 			continue ;
 		if (line[0] == '#')
