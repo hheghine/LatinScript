@@ -41,6 +41,9 @@ scribere << x
 
 x = 42
 
+< x == 42 >
+	scribere << *if condition worked!*
+
 scribere << y
 scribere << *hello\\\n*
 

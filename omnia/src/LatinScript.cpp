@@ -16,8 +16,8 @@ LatinScript::LatinScript(const std::string& filename)
 	try {
 		letsGo(filename);
 	} catch (const std::exception& e) {
-		std::cout << ls::MAIN << "[ " << ls::RED << "✘" \
-		<< ls::MAIN << " ]" << "\t\texception: " << e.what() \
+		std::cout << ls::RED << "[ " << ls::RED << "✘" \
+		<< "\t\t\t]" << "\terror: " << e.what() \
 		<< ls::CRST << std::endl;
 	}
 }
@@ -322,11 +322,15 @@ void	LatinScript::handleCondition(const svector& vec)
 		_is_if = true;
 	else if (vec.at(0) == "<<")
 	{
+		if (!_is_if)
+			throw std::invalid_argument("else if without if condition");
 		_is_if = false;
 		_is_elseif = true;
 	}
 	else if (vec.at(0) == "<<<")
 	{
+		if (!_is_if)
+			throw std::invalid_argument("else without if condition");
 		_is_elseif = false;
 		_is_else = true;
 	}
