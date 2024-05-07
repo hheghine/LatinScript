@@ -111,6 +111,20 @@ void	Numerus::division(const Object* rhs)
 		throw std::invalid_argument("invalid argument type: " + rhs->type);
 }
 
+bool	Numerus::isEqual(const std::string& rhs)
+{
+	if (std::isdigit(rhs[0]) || rhs[0] == '-' || rhs[0] == '+')
+		return *((int *)value) == toInt(rhs);
+	throw std::invalid_argument("invalid argument: " + rhs);
+}
+
+bool	Numerus::isEqual(const Object* rhs)
+{
+	if (this->type == rhs->type)
+		return *((int *)value) == *((int *)rhs->value);
+	throw std::invalid_argument("invalid consition: " + this->type + " == " + rhs->type);
+}
+
 Object*	Numerus::clone() const
 {
 	return new Numerus();

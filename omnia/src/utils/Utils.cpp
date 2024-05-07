@@ -26,7 +26,13 @@ bool	ls::isLoop(const std::string& statement)
 
 bool	ls::isCondition(const std::string& statement)
 {
-	return statement == "<";
+	return (statement == "<" || statement == "<<" || statement == "<<<");
+}
+
+bool	ls::isConditionOperator(const std::string& statement)
+{
+	return (statement == "==" || statement == ">" || statement == "<" || \
+			statement == ">=" || statement == "<=");
 }
 
 bool	ls::isAssignment(const std::string& key)

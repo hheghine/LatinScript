@@ -28,6 +28,9 @@ class Numerus : public Object {
 		void	division(const std::string& rhs);
 		void	division(const Object* rhs);
 
+		bool	isEqual(const std::string& rhs);
+		bool	isEqual(const Object* rhs);
+
 		Object*	clone() const;
 
 		std::string	__string() const;

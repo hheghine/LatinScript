@@ -6,6 +6,12 @@ LatinScript::LatinScript(const std::string& filename)
 	: _output(false)
 	, _chainedOperations(false)
 	, _isAssignment(false)
+	, _is_if(false)
+	, _is_elseif(false)
+	, __if(false)
+	, __elseif(false)
+	, __else(false)
+	, _ignore(false)
 {
 	try {
 		letsGo(filename);
@@ -14,6 +20,44 @@ LatinScript::LatinScript(const std::string& filename)
 		<< ls::MAIN << " ]" << "\t\texception: " << e.what() \
 		<< ls::CRST << std::endl;
 	}
+}
+
+LatinScript::~LatinScript()
+{
+	for (auto it = objects.begin(); it != objects.end(); ++it)
+		delete *it;
+	objects.clear();
+}
+
+void	LatinScript::handleOutput(const svector& vec, const std::string& line)
+{
+	if (vec.begin() + 1 == vec.end() || *(vec.begin() + 1) != "<<")
+		throw std::invalid_argument("invalid input or nothing to output: " + *(line.begin() + 1));
+
+	std::string output;
+	std::string::const_iterator it1 = ls::search(line.begin(), line.end(), "<<");
+	std::string::const_iterator it2;
+
+	while (it1 != line.end())
+	{
+		it2 = ls::search(it1 + 1, line.end(), "<<");
+		if (it2 == line.end() && it2 - 1 != line.end() && *(it2 - 1) == '<')
+			throw std::invalid_argument("wrong syntax");
+
+		if (ls::search(it1, it2, '*') != it2)
+			output += extractString(it1, it2, '*');
+		else
+		{
+			std::string var = extractString(it1, it2);
+			if (!var.empty() && vars.find(var) != vars.end())
+				output += vars[var]->__string();
+			else
+				throw std::invalid_argument("invalid input or nothing to output: " + var);
+		}
+		it1 = it2;
+	}
+	displayOutput(true, output);
+	_output = true;
 }
 
 void	LatinScript::letsGo(const std::string& filename)
@@ -33,9 +77,20 @@ void	LatinScript::letsGo(const std::string& filename)
 
 	while (std::getline(file, line))
 	{
+		// std::cout << "IGNORE: " << _ignore << std::endl;
 		_output = false;
+		if (_ignore && line[0] == '\t')
+			continue ;
+		_ignore = false;
 		svector vec = splitLine(line);
 		if (vec.empty())
+			continue ;
+		if ((vec[0] == "<<" && __if) || \
+			(vec[0] == "<<<" && (__if || __elseif)))
+			_ignore = true;
+		// if (!isCondition(vec[0]) && line[0] != '\t')
+		// 	_ignore = false;
+		if (_ignore && (line[0] == '\t' || isCondition(vec[0])))
 			continue ;
 		if (line[0] == '#')
 			continue ;
@@ -61,7 +116,22 @@ void	LatinScript::letsGo(const std::string& filename)
 		else if (vars.find(vec[0]) != vars.end())
 			it += 1;
 		else if (isCondition(vec[0]))
-			std::cout << ls::GRY << "\t\tCONDITION!" << std::endl;
+		{
+			handleCondition(vec);
+			if (!conditionBlockTrue(vec[0]))
+			{
+				displayOutput(true, "false");
+				_output = true;
+				_ignore = true;
+				continue ;
+			}
+			else
+			{
+				displayOutput(true, "true");
+				// _ignore = true;
+				_output = true;
+			}
+		}
 		else if (isLoop(vec[0]))
 			std::cout << ls::GRY <<"\t\tLOOP!" << std::endl;
 		else if (vec[0] == "scribere")
@@ -72,7 +142,6 @@ void	LatinScript::letsGo(const std::string& filename)
 		if (!_output)
 			displayOutput(false, "");
 	}
-
 }
 
 void	LatinScript::createVariable(const std::vector<std::string>& vec)
@@ -247,40 +316,91 @@ void	LatinScript::handleDivision(const svector& vec, const_iterator lhs, const_i
 	}
 }
 
-void	LatinScript::handleOutput(const svector& vec, const std::string& line)
+void	LatinScript::handleCondition(const svector& vec)
 {
-	if (vec.begin() + 1 == vec.end() || *(vec.begin() + 1) != "<<")
-		throw std::invalid_argument("invalid input or nothing to output: " + *(line.begin() + 1));
-
-	std::string output;
-	std::string::const_iterator it1 = ls::search(line.begin(), line.end(), "<<");
-	std::string::const_iterator it2;
-
-	while (it1 != line.end())
+	if (vec.at(0) == "<")
+		_is_if = true;
+	else if (vec.at(0) == "<<")
 	{
-		it2 = ls::search(it1 + 1, line.end(), "<<");
-		if (it2 == line.end() && it2 - 1 != line.end() && *(it2 - 1) == '<')
-			throw std::invalid_argument("wrong syntax");
-
-		if (ls::search(it1, it2, '*') != it2)
-			output += extractString(it1, it2, '*');
-		else
-		{
-			std::string var = extractString(it1, it2);
-			if (!var.empty() && vars.find(var) != vars.end())
-				output += vars[var]->__string();
-			else
-				throw std::invalid_argument("invalid input or nothing to output: " + var);
-		}
-		it1 = it2;
+		_is_if = false;
+		_is_elseif = true;
 	}
-	displayOutput(true, output);
-	_output = true;
+	else if (vec.at(0) == "<<<")
+	{
+		_is_elseif = false;
+		_is_else = true;
+	}
+
+	__if = false;
+	__elseif = false;
+	__else = true;
+
+	if (((_is_if || _is_elseif) && vec.size() != 5 && !isConditionOperator(vec.at(2))) || \
+		(_is_else && vec.size() != 2) || \
+		*(vec.end() - 1) != ">")
+		throw std::invalid_argument("wrong condition syntax");
+
+	if (_is_if)
+	{
+		if (isConditionTrue(vec.at(2), vec.at(1), vec.at(3)))
+		{
+			__if = true;
+			__elseif = false;
+			__else = false;
+		}
+	}
+	else if (_is_elseif && !__if)
+	{
+		if (isConditionTrue(vec.at(2), vec.at(1), vec.at(3)))
+		{
+			__elseif = true;
+			__else = false;
+		}
+	}
+	// else if (__else)
+	// {
+	// 	__if = false;
+	// 	__elseif = false;
+	// 	__else = true;
+	// }
 }
 
-LatinScript::~LatinScript()
+bool	LatinScript::isConditionTrue(const std::string& op, const std::string& lhs, const std::string& rhs)
 {
-	for (auto it = objects.begin(); it != objects.end(); ++it)
-		delete *it;
-	objects.clear();
+	auto opr = condition_map.find(op);
+	if (opr == condition_map.end())
+		throw std::invalid_argument("wrong condition operator: " + op);
+
+	switch(opr->second)
+	{
+		case conditions::EQUAL :
+			return handleIsEqual(lhs, rhs);
+			// break ;
+		case conditions::GREATER :
+			break ;
+		case conditions::LESS :
+			break ;
+		case conditions::GREATER_EQ :
+			break ;
+		case conditions::LESS_EQ :
+			break ;
+	}
+	return false;
+}
+
+bool	LatinScript::conditionBlockTrue(const std::string& block)
+{
+	return ((block == "<" && __if) || \
+			(block == "<<" && __elseif) || \
+			(block == "<<<" && __else));
+}
+
+bool	LatinScript::handleIsEqual(const std::string& lhs, const std::string& rhs)
+{
+	if (vars.find(lhs) == vars.end())
+		throw std::invalid_argument("wrong condition");
+
+	if (vars.find(rhs) != vars.end())
+		return vars[lhs]->isEqual(vars[rhs]);
+	return vars[lhs]->isEqual(rhs);
 }

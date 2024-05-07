@@ -32,6 +32,9 @@ public:
 	virtual void	division(const std::string& rhs) = 0;
 	virtual void	division(const Object* rhs) = 0;
 
+	virtual bool	isEqual(const std::string& rhs) = 0;
+	virtual bool	isEqual(const Object* rhs) = 0;
+
 	virtual Object*		clone() const = 0;
 
 	virtual std::string __string() const = 0;

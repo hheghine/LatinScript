@@ -48,7 +48,17 @@ enum class operators : char {
 	PLUS		= '+',
 	MINUS		= '-',
 	MULTIPLY	= '*',
-	DIVIDE		= '/'
+	DIVIDE		= '/',
+};
+
+/*-------------ENUM CONDITION-------------*/
+
+enum class conditions : char {
+	EQUAL		= '0',
+	GREATER		= '1',
+	LESS		= '2',
+	GREATER_EQ	= '3',
+	LESS_EQ		= '4'
 };
 
 /*--------------OPERATOR MAP--------------*/
@@ -58,7 +68,17 @@ const std::unordered_map<std::string, operators> operator_map = {
 	{"+", operators::PLUS},
 	{"-", operators::MINUS},
 	{"*", operators::MULTIPLY},
-	{"/", operators::DIVIDE}
+	{"/", operators::DIVIDE},
+};
+
+/*--------------CONDITION MAP--------------*/
+
+const std::unordered_map<std::string, conditions> condition_map = {
+	{"==", conditions::EQUAL},
+	{">", conditions::GREATER},
+	{"<", conditions::LESS},
+	{">=", conditions::GREATER_EQ},
+	{"<=", conditions::LESS_EQ}
 };
 
 /*-------------RESERVED NAMES-------------*/
@@ -70,7 +90,10 @@ const svector reserved = {
 	{"duplus"},		/* double	*/
 	{"dum"},		/* while	*/
 	{"scribere"},	/* cout		*/
-	{"arredo"}		/* array	*/
+	{"arredo"},		/* array	*/
+	{"tmp"},
+	{"__lhs"},
+	{"__rhs"}
 };
 
 /*----------------MESSAGES----------------*/
@@ -125,6 +148,7 @@ bool		isOperator(const std::string& key);
 bool		isType(const std::string& statement);
 bool		isLoop(const std::string& statement);
 bool		isCondition(const std::string& statement);
+bool		isConditionOperator(const std::string& statement);
 bool		varNameCheck(const std::string& name);
 
 int			toInt(const std::string& str);
@@ -159,6 +183,16 @@ class LatinScript {
 		bool _chainedOperations;
 		bool _isAssignment;
 
+		bool _is_if;
+		bool _is_elseif;
+		bool _is_else;
+
+		bool __if;
+		bool __elseif;
+		bool __else;
+
+		bool _ignore;
+
 	private:
 		void	letsGo(const std::string& filename);
 		void	createVariable(const svector& vec);
@@ -169,7 +203,13 @@ class LatinScript {
 		void	handleSubstraction(const svector& vec, const_iterator lhs, const_iterator& it);
 		void	handleMultiplication(const svector& vec, const_iterator lhs, const_iterator& it);
 		void	handleDivision(const svector& vec, const_iterator lhs, const_iterator& it);
+		void	handleCondition(const svector& vec);
+		bool	isConditionTrue(const std::string& op, const std::string& lhs, const std::string& rhs);
 		void	handleOutput(const svector& vec, const std::string& line);
+
+		bool	handleIsEqual(const std::string& lhs, const std::string& rhs);
+		bool	conditionBlockTrue(const std::string& block);
+
 };
 
 

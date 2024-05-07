@@ -22,12 +22,17 @@ scribere << z
 
 scribere << *blabla\t* << y << *aa* << x << *bb*
 
-################ this is IF
-# < x == y >
-################ this is ELSE IF
-# << x == 5 >
-################ this is ELSE
-# <<< x == 4 >
+scribere << x
+
+##### this is IF
+< x == 3 >
+	scribere << *if condition worked!*
+
+<< x == 1 >
+	scribere << *else if condition worked*
+
+#<<< >
+#	scribere << *ELSE !!*
 
 scribere << x
 
