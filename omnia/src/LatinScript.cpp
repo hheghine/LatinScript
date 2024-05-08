@@ -77,7 +77,6 @@ void	LatinScript::letsGo(const std::string& filename)
 
 	while (std::getline(file, line))
 	{
-		// std::cout << "IGNORE: " << _ignore << std::endl;
 		_output = false;
 		if (_ignore && line[0] == '\t')
 			continue ;
@@ -128,7 +127,6 @@ void	LatinScript::letsGo(const std::string& filename)
 			else
 			{
 				displayOutput(true, "true");
-				// _ignore = true;
 				_output = true;
 			}
 		}
@@ -379,15 +377,14 @@ bool	LatinScript::isConditionTrue(const std::string& op, const std::string& lhs,
 	{
 		case conditions::EQUAL :
 			return handleIsEqual(lhs, rhs);
-			// break ;
 		case conditions::GREATER :
-			break ;
+			return handleIsGreater(lhs, rhs);
 		case conditions::LESS :
-			break ;
+			return handleIsLess(lhs, rhs);
 		case conditions::GREATER_EQ :
-			break ;
+			return handleIsGreaterOrEq(lhs, rhs);
 		case conditions::LESS_EQ :
-			break ;
+			return handleIsLessOrEq(lhs, rhs);
 	}
 	return false;
 }
@@ -407,4 +404,44 @@ bool	LatinScript::handleIsEqual(const std::string& lhs, const std::string& rhs)
 	if (vars.find(rhs) != vars.end())
 		return vars[lhs]->isEqual(vars[rhs]);
 	return vars[lhs]->isEqual(rhs);
+}
+
+bool	LatinScript::handleIsGreater(const std::string& lhs, const std::string& rhs)
+{
+	if (vars.find(lhs) == vars.end())
+		throw std::invalid_argument("wrong condition");
+
+	if (vars.find(rhs) != vars.end())
+		return vars[lhs]->isGreater(vars[rhs]);
+	return vars[lhs]->isGreater(rhs);
+}
+
+bool	LatinScript::handleIsLess(const std::string& lhs, const std::string& rhs)
+{
+	if (vars.find(lhs) == vars.end())
+		throw std::invalid_argument("wrong condition");
+
+	if (vars.find(rhs) != vars.end())
+		return vars[lhs]->isLess(vars[rhs]);
+	return vars[lhs]->isLess(rhs);
+}
+
+bool	LatinScript::handleIsGreaterOrEq(const std::string& lhs, const std::string& rhs)
+{
+	if (vars.find(lhs) == vars.end())
+		throw std::invalid_argument("wrong condition");
+
+	if (vars.find(rhs) != vars.end())
+		return vars[lhs]->isGreaterOrEq(vars[rhs]);
+	return vars[lhs]->isGreaterOrEq(rhs);
+}
+
+bool	LatinScript::handleIsLessOrEq(const std::string& lhs, const std::string& rhs)
+{
+	if (vars.find(lhs) == vars.end())
+		throw std::invalid_argument("wrong condition");
+
+	if (vars.find(rhs) != vars.end())
+		return vars[lhs]->isGreaterOrEq(vars[rhs]);
+	return vars[lhs]->isGreaterOrEq(rhs);
 }

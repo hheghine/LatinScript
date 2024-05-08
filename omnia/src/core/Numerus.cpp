@@ -125,6 +125,54 @@ bool	Numerus::isEqual(const Object* rhs)
 	throw std::invalid_argument("invalid consition: " + this->type + " == " + rhs->type);
 }
 
+bool	Numerus::isGreater(const std::string& rhs)
+{
+	if (std::isdigit(rhs[0]) || rhs[0] == '-' || rhs[0] == '+')
+		return *((int *)value) > toInt(rhs);
+	throw std::invalid_argument("invalid argument: " + rhs);
+}
+
+bool	Numerus::isGreater(const Object* rhs)
+{
+	if (this->type == rhs->type)
+		return *((int *)value) > *((int *)rhs->value);
+	throw std::invalid_argument("invalid consition: " + this->type + " == " + rhs->type);
+}
+
+bool	Numerus::isLess(const std::string& rhs)
+{
+	if (std::isdigit(rhs[0]) || rhs[0] == '-' || rhs[0] == '+')
+		return *((int *)value) < toInt(rhs);
+	throw std::invalid_argument("invalid argument: " + rhs);
+}
+
+bool	Numerus::isLess(const Object* rhs)
+{
+	if (this->type == rhs->type)
+		return *((int *)value) < *((int *)rhs->value);
+	throw std::invalid_argument("invalid consition: " + this->type + " == " + rhs->type);
+}
+
+bool	Numerus::isGreaterOrEq(const std::string& rhs)
+{
+	return !isLess(rhs);
+}
+
+bool	Numerus::isGreaterOrEq(const Object* rhs)
+{
+	return !isLess(rhs);
+}
+
+bool	Numerus::isLessOrEq(const std::string& rhs)
+{
+	return !isGreater(rhs);
+}
+
+bool	Numerus::isLessOrEq(const Object* rhs)
+{
+	return !isGreater(rhs);
+}
+
 Object*	Numerus::clone() const
 {
 	return new Numerus();

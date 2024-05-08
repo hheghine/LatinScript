@@ -31,6 +31,18 @@ class Numerus : public Object {
 		bool	isEqual(const std::string& rhs);
 		bool	isEqual(const Object* rhs);
 
+		bool	isGreater(const std::string& rhs);
+		bool	isGreater(const Object* rhs);
+
+		bool	isLess(const std::string& rhs);
+		bool	isLess(const Object* rhs);
+
+		bool	isGreaterOrEq(const std::string& rhs);
+		bool	isGreaterOrEq(const Object* rhs);
+
+		bool	isLessOrEq(const std::string& rhs);
+		bool	isLessOrEq(const Object* rhs);
+
 		Object*	clone() const;
 
 		std::string	__string() const;

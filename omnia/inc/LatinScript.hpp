@@ -204,10 +204,14 @@ class LatinScript {
 		void	handleMultiplication(const svector& vec, const_iterator lhs, const_iterator& it);
 		void	handleDivision(const svector& vec, const_iterator lhs, const_iterator& it);
 		void	handleCondition(const svector& vec);
-		bool	isConditionTrue(const std::string& op, const std::string& lhs, const std::string& rhs);
 		void	handleOutput(const svector& vec, const std::string& line);
 
 		bool	handleIsEqual(const std::string& lhs, const std::string& rhs);
+		bool	handleIsGreater(const std::string& lhs, const std::string& rhs);
+		bool	handleIsLess(const std::string& lhs, const std::string& rhs);
+		bool	handleIsGreaterOrEq(const std::string& lhs, const std::string& rhs);
+		bool	handleIsLessOrEq(const std::string& lhs, const std::string& rhs);
+		bool	isConditionTrue(const std::string& op, const std::string& lhs, const std::string& rhs);
 		bool	conditionBlockTrue(const std::string& block);
 
 };

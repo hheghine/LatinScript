@@ -35,6 +35,18 @@ public:
 	virtual bool	isEqual(const std::string& rhs) = 0;
 	virtual bool	isEqual(const Object* rhs) = 0;
 
+	virtual bool	isGreater(const Object* rhs) = 0;
+	virtual bool	isGreater(const std::string& rhs) = 0;
+
+	virtual bool	isLess(const std::string& rhs) = 0;
+	virtual bool	isLess(const Object* rhs) = 0;
+
+	virtual bool	isGreaterOrEq(const std::string& rhs) = 0;
+	virtual bool	isGreaterOrEq(const Object* rhs) = 0;
+
+	virtual bool	isLessOrEq(const std::string& rhs) = 0;
+	virtual bool	isLessOrEq(const Object* rhs) = 0;
+
 	virtual Object*		clone() const = 0;
 
 	virtual std::string __string() const = 0;

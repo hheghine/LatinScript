@@ -28,7 +28,7 @@ scribere << x
 < x == 3 >
 	scribere << *if condition worked!*
 
-<< x == 1 >
+<< x >= 1 >
 	scribere << *else if condition worked*
 
 << x == 12 >
@@ -41,7 +41,7 @@ scribere << x
 
 x = 42
 
-< x == 42 >
+< x <= 42 >
 	scribere << *if condition worked!*
 
 scribere << y
