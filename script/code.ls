@@ -48,4 +48,4 @@ scribere << y
 scribere << *hello\\\n*
 
 
-#dum < x == 5 >
+dum < x == 5 >

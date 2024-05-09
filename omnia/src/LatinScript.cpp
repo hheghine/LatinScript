@@ -73,72 +73,95 @@ void	LatinScript::letsGo(const std::string& filename)
 		throw std::invalid_argument("bad file");
 
 	std::string	line;
-	std::string	buffer;
 
 	while (std::getline(file, line))
 	{
-		_output = false;
-		if (_ignore && line[0] == '\t')
-			continue ;
-		_ignore = false;
-		svector vec = splitLine(line);
-		if (vec.empty())
-			continue ;
-		if ((vec[0] == "<<" && __if) || \
-			(vec[0] == "<<" && _is_elseif && __elseif) || \
-			(vec[0] == "<<<" && (__if || __elseif)))
-			_ignore = true;
+		std::stringstream ss(line);
+		std::string first_word;
 
-		if (_ignore && (line[0] == '\t' || isCondition(vec[0])))
-			continue ;
-		if (line[0] == '#')
-			continue ;
+		ss >> first_word;
 
-		displayInput(vec);
-
-		auto it = vec.begin();
-		if(isType(vec[0]))
-		{
-			createVariable(vec);
-
-			if (vec.begin() + 2 == vec.end())
-			{
-				displayOutput(false, "");
-				continue ;
-			}
-
-			it += 2;
-
-			if (vec[2] != "=")
-				throw std::invalid_argument("wrong operation: " + vec[2]);
-		}
-		else if (vars.find(vec[0]) != vars.end())
-			it += 1;
-		else if (isCondition(vec[0]))
-		{
-			handleCondition(vec);
-			if (!conditionBlockTrue(vec[0]))
-			{
-				displayOutput(true, "false");
-				_output = true;
-				_ignore = true;
-				continue ;
-			}
-			else
-			{
-				displayOutput(true, "true");
-				_output = true;
-			}
-		}
-		else if (isLoop(vec[0]))
-			std::cout << ls::GRY <<"\t\tLOOP!" << std::endl;
-		else if (vec[0] == "scribere")
-			handleOutput(vec, line);
+		if (first_word == "dum")
+			handleLoop(file, line);
 		else
-			throw std::invalid_argument("bad start statement: " + vec[0]);
-		handleStatement(vec, it);
-		if (!_output)
+			mainLoop(line);
+	}
+}
+
+void	LatinScript::mainLoop(const std::string& line)
+{
+	_output = false;
+	if (_ignore && line[0] == '\t')
+		return ;
+	_ignore = false;
+	svector vec = splitLine(line);
+	if (vec.empty())
+		return ;
+	if ((vec[0] == "<<" && __if) || \
+		(vec[0] == "<<" && _is_elseif && __elseif) || \
+		(vec[0] == "<<<" && (__if || __elseif)))
+		_ignore = true;
+
+	if (_ignore && (line[0] == '\t' || isCondition(vec[0])))
+		return ;
+	if (line[0] == '#')
+		return ;
+
+	displayInput(vec);
+
+	auto it = vec.begin();
+	if(isType(vec[0]))
+	{
+		createVariable(vec);
+
+		if (vec.begin() + 2 == vec.end())
+		{
 			displayOutput(false, "");
+			return ;
+		}
+
+		it += 2;
+
+		if (vec[2] != "=")
+			throw std::invalid_argument("wrong operation: " + vec[2]);
+	}
+	else if (vars.find(vec[0]) != vars.end())
+		it += 1;
+	else if (isCondition(vec[0]))
+	{
+		handleCondition(vec);
+		if (!conditionBlockTrue(vec[0]))
+		{
+			displayOutput(true, "false");
+			_output = true;
+			_ignore = true;
+			return ;
+		}
+		else
+		{
+			displayOutput(true, "true");
+			_output = true;
+		}
+	}
+	else if (isLoop(vec[0]))
+		std::cout << ls::GRY <<"\t\tLOOP!" << std::endl;
+	else if (vec[0] == "scribere")
+		handleOutput(vec, line);
+	else
+		throw std::invalid_argument("bad start statement: " + vec[0]);
+	handleStatement(vec, it);
+	if (!_output)
+		displayOutput(false, "");
+}
+
+void	LatinScript::handleLoop(std::ifstream& file, std::string& condition)
+{
+	std::string tmp;
+
+	while (std::getline(file, tmp))
+	{
+		svector vec;
+		std::stringstream ss(tmp);
 	}
 }
 

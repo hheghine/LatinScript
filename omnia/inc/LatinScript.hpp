@@ -194,7 +194,11 @@ class LatinScript {
 		bool _ignore;
 
 	private:
+
 		void	letsGo(const std::string& filename);
+
+		void	mainLoop(const std::string& line);
+
 		void	createVariable(const svector& vec);
 		void	handleStatement(const svector& vec, const_iterator it);
 		void	handleOperator(const svector& vec, const_iterator lhs, const_iterator& it);
@@ -213,6 +217,8 @@ class LatinScript {
 		bool	handleIsLessOrEq(const std::string& lhs, const std::string& rhs);
 		bool	isConditionTrue(const std::string& op, const std::string& lhs, const std::string& rhs);
 		bool	conditionBlockTrue(const std::string& block);
+
+		void	handleLoop(std::ifstream& file, std::string& condition);
 
 };
 
