@@ -48,4 +48,9 @@ scribere << y
 scribere << *hello\\\n*
 
 
-dum < x == 5 >
+dum < x > 35 >
+	scribere << *x = * << x
+	scribere << *this is loop!*
+	x = x - 1
+
+scribere << *still working fine*

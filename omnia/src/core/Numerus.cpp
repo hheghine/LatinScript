@@ -7,7 +7,10 @@ int	toInt(const std::string& str)
 	char remaining;
 
 	if (!(ss >> val) || ss.get(remaining))
+	{
+		std::cout << val << std::endl;
 		throw std::invalid_argument("invalid assignment operation: " + str);
+	}
 	return val;
 }
 

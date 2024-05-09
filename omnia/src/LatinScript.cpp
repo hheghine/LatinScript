@@ -84,11 +84,11 @@ void	LatinScript::letsGo(const std::string& filename)
 		if (first_word == "dum")
 			handleLoop(file, line);
 		else
-			mainLoop(line);
+			mainLoop(file, line);
 	}
 }
 
-void	LatinScript::mainLoop(const std::string& line)
+void	LatinScript::mainLoop(std::ifstream& file, const std::string& line)
 {
 	_output = false;
 	if (_ignore && line[0] == '\t')
@@ -144,7 +144,7 @@ void	LatinScript::mainLoop(const std::string& line)
 		}
 	}
 	else if (isLoop(vec[0]))
-		std::cout << ls::GRY <<"\t\tLOOP!" << std::endl;
+		handleLoop(file, line);
 	else if (vec[0] == "scribere")
 		handleOutput(vec, line);
 	else
@@ -154,14 +154,32 @@ void	LatinScript::mainLoop(const std::string& line)
 		displayOutput(false, "");
 }
 
-void	LatinScript::handleLoop(std::ifstream& file, std::string& condition)
+void	LatinScript::handleLoop(std::ifstream& file, const std::string& condition)
 {
-	std::string tmp;
+	svector condition_vec = splitLine(condition);
+	condition_vec.erase(condition_vec.begin());
 
-	while (std::getline(file, tmp))
+	std::string line;
+	svector vec;
+
+	while (std::getline(file, line))
 	{
-		svector vec;
-		std::stringstream ss(tmp);
+		if (line[0] != '\t')
+			break ;
+		vec.push_back(line);
+	}
+	auto it = vec.begin();
+	// __if = true;
+	while (1)
+	{
+		handleCondition(condition_vec);
+		if (!__if)
+			break;
+		mainLoop(file, *it);
+		++it;
+		if (it == vec.end())
+			it = vec.begin();
+		__if = false;
 	}
 }
 
