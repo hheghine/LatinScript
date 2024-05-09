@@ -30,6 +30,10 @@ scribere << x
 
 << x >= 1 >
 	scribere << *else if condition worked*
+	< x == 1 >
+		scribere << *YUP*
+	<< x > 1 >
+		scribere << *NO*
 
 << x == 12 >
 	scribere << *else if condition worked*
@@ -50,7 +54,6 @@ scribere << *hello\\\n*
 
 dum < x > 35 >
 	scribere << *x = * << x
-	scribere << *this is loop!*
 	x = x - 1
 
 scribere << *still working fine*
