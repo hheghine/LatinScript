@@ -1,3 +1,4 @@
+#functio sum
 
 numerus x
 numerus y = -1
@@ -57,3 +58,7 @@ dum < x > 35 >
 	x = x - 1
 
 scribere << *still working fine*
+
+#functio sum < numerus : numerus a, numerus b >
+#	return a + b
+

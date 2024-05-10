@@ -147,6 +147,8 @@ void	LatinScript::mainLoop(std::ifstream& file, const std::string& line)
 		handleLoop(file, line);
 	else if (vec[0] == "scribere")
 		handleOutput(vec, line);
+	// else if (vec[0] == "functio")
+		// handleFunction(file, line);
 	else
 		throw std::invalid_argument("bad start statement: " + vec[0]);
 	handleStatement(vec, it);
