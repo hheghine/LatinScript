@@ -1,8 +1,5 @@
 #include "Functio.hpp"
 
-// #functio sum < numerus a, numerus b > : numerus
-// #	return a + b
-
 Functio::Functio(const std::string& declaration)
 	: _name("")
 	, _return_type("")
@@ -32,12 +29,8 @@ Functio::Functio(const std::string& declaration)
 		if (!utils::isType(*it))
 			throw std::invalid_argument("wrong function syntax");
 		it ++;
-		// if ((*it).at((*it).size() - 1) != ',' || (it + 1 != decl_vec.end() && *(it + 1) == ">" ))
-		// {
-		// 	std::cout << "stex" << std::endl;
-		// 	throw std::invalid_argument("wrong function syntax");
-
-		// }
+		if (((*it).at((*it).size() - 1) != ',' && it + 1 != decl_vec.end() && *(it + 1) != ">"))
+			throw std::invalid_argument("wrong function syntax");
 
 		std::string var_name = *it;
 		if (var_name[var_name.size() - 1] == ',')
