@@ -2,6 +2,5 @@
 
 Functio::Functio(const std::string& declaration)
 {
-	(void) declaration;
-	// svector vec = 
+	svector decl_vec = utils::splitLine(declaration);
 }
