@@ -35,20 +35,20 @@ void	LatinScript::handleOutput(const svector& vec, const std::string& line)
 		throw std::invalid_argument("invalid input or nothing to output: " + *(line.begin() + 1));
 
 	std::string output;
-	std::string::const_iterator it1 = ls::search(line.begin(), line.end(), "<<");
+	std::string::const_iterator it1 = utils::search(line.begin(), line.end(), "<<");
 	std::string::const_iterator it2;
 
 	while (it1 != line.end())
 	{
-		it2 = ls::search(it1 + 1, line.end(), "<<");
+		it2 = utils::search(it1 + 1, line.end(), "<<");
 		if (it2 == line.end() && it2 - 1 != line.end() && *(it2 - 1) == '<')
 			throw std::invalid_argument("wrong syntax");
 
-		if (ls::search(it1, it2, '*') != it2)
-			output += extractString(it1, it2, '*');
+		if (utils::search(it1, it2, '*') != it2)
+			output += utils::extractString(it1, it2, '*');
 		else
 		{
-			std::string var = extractString(it1, it2);
+			std::string var = utils::extractString(it1, it2);
 			if (!var.empty() && vars.find(var) != vars.end())
 				output += vars[var]->__string();
 			else
@@ -94,7 +94,7 @@ void	LatinScript::mainLoop(std::ifstream& file, const std::string& line)
 	if (_ignore && line[0] == '\t')
 		return ;
 	_ignore = false;
-	svector vec = splitLine(line);
+	svector vec = utils::splitLine(line);
 	if (vec.empty())
 		return ;
 	if ((vec[0] == "<<" && __if) || \
@@ -158,7 +158,7 @@ void	LatinScript::mainLoop(std::ifstream& file, const std::string& line)
 
 void	LatinScript::handleLoop(std::ifstream& file, const std::string& condition)
 {
-	svector condition_vec = splitLine(condition);
+	svector condition_vec = utils::splitLine(condition);
 	condition_vec.erase(condition_vec.begin());
 
 	std::string line;
@@ -487,4 +487,52 @@ bool	LatinScript::handleIsLessOrEq(const std::string& lhs, const std::string& rh
 	if (vars.find(rhs) != vars.end())
 		return vars[lhs]->isGreaterOrEq(vars[rhs]);
 	return vars[lhs]->isGreaterOrEq(rhs);
+}
+
+// statement == "arredo" || statement == "functio"
+bool	ls::isType(const std::string& statement)
+{
+	return (statement == "numerus" || statement == "filum" \
+		|| statement == "verum" || statement == "duplus");
+}
+
+bool	ls::isLoop(const std::string& statement)
+{
+	return statement == "dum";
+}
+
+bool	ls::isCondition(const std::string& statement)
+{
+	return (statement == "<" || statement == "<<" || statement == "<<<");
+}
+
+bool	ls::isConditionOperator(const std::string& statement)
+{
+	return (statement == "==" || statement == ">" || statement == "<" || \
+			statement == ">=" || statement == "<=");
+}
+
+bool	ls::isAssignment(const std::string& key)
+{
+	return key == "=";
+}
+
+bool	ls::isOperator(const std::string& key)
+{
+	return (key == "=" || key == "+" || key == "-" \
+			|| key == "*" || key == "/");
+}
+
+bool	ls::varNameCheck(const std::string& name)
+{
+	for (auto it = ls::reserved.begin(); it != ls::reserved.end(); ++it)
+		if (name == *it)
+			return false;
+
+	if ((name[0] >= 65 && name[0] <= 90) || \
+		(name[0] >= 97 && name[0] <= 122) || \
+		name[0] == '_')
+		return true;
+
+	return false;
 }

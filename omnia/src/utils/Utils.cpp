@@ -1,6 +1,7 @@
 #include "LatinScript.hpp"
+#include "Utils.hpp"
 
-ls::svector	ls::splitLine(const std::string& line)
+ls::svector	utils::splitLine(const std::string& line)
 {
 	std::stringstream ss(line);
 
@@ -12,55 +13,7 @@ ls::svector	ls::splitLine(const std::string& line)
 	return vec;
 }
 
-// statement == "arredo" || statement == "functio"
-bool	ls::isType(const std::string& statement)
-{
-	return (statement == "numerus" || statement == "filum" \
-		|| statement == "verum" || statement == "duplus");
-}
-
-bool	ls::isLoop(const std::string& statement)
-{
-	return statement == "dum";
-}
-
-bool	ls::isCondition(const std::string& statement)
-{
-	return (statement == "<" || statement == "<<" || statement == "<<<");
-}
-
-bool	ls::isConditionOperator(const std::string& statement)
-{
-	return (statement == "==" || statement == ">" || statement == "<" || \
-			statement == ">=" || statement == "<=");
-}
-
-bool	ls::isAssignment(const std::string& key)
-{
-	return key == "=";
-}
-
-bool	ls::isOperator(const std::string& key)
-{
-	return (key == "=" || key == "+" || key == "-" \
-			|| key == "*" || key == "/");
-}
-
-bool	ls::varNameCheck(const std::string& name)
-{
-	for (auto it = ls::reserved.begin(); it != ls::reserved.end(); ++it)
-		if (name == *it)
-			return false;
-
-	if ((name[0] >= 65 && name[0] <= 90) || \
-		(name[0] >= 97 && name[0] <= 122) || \
-		name[0] == '_')
-		return true;
-
-	return false;
-}
-
-int	ls::toInt(const std::string& str)
+int	utils::toInt(const std::string& str)
 {
 	std::stringstream ss(str);
 	int val = 0;
@@ -71,7 +24,7 @@ int	ls::toInt(const std::string& str)
 	return val;
 }
 
-std::string::const_iterator	ls::search(std::string::const_iterator start, \
+std::string::const_iterator	utils::search(std::string::const_iterator start, \
 										std::string::const_iterator end, char key)
 {
 	std::string::const_iterator it;
@@ -82,7 +35,7 @@ std::string::const_iterator	ls::search(std::string::const_iterator start, \
 	return end;
 }
 
-std::string::const_iterator ls::search(std::string::const_iterator start, \
+std::string::const_iterator utils::search(std::string::const_iterator start, \
 										std::string::const_iterator end, \
 										const std::string& key)
 {
@@ -98,7 +51,7 @@ std::string::const_iterator ls::search(std::string::const_iterator start, \
 	return end;
 }
 
-std::string	ls::extractString(std::string::const_iterator start, \
+std::string	utils::extractString(std::string::const_iterator start, \
 										std::string::const_iterator end)
 {
 	std::string res;
@@ -117,7 +70,7 @@ std::string	ls::extractString(std::string::const_iterator start, \
 	return std::string(it, start);
 }
 
-std::string ls::extractString(std::string::const_iterator start, \
+std::string utils::extractString(std::string::const_iterator start, \
 								std::string::const_iterator end, char key)
 {
 	std::string extracted;

@@ -16,6 +16,7 @@
 
 # include "Numerus.hpp"
 # include "Functio.hpp"
+# include "Utils.hpp"
 
 namespace ls
 {
@@ -142,8 +143,6 @@ inline static void	displayOutput(bool flag, const std::string& message)
 
 /*------------------UTILS------------------*/
 
-svector		splitLine(const std::string& line);
-
 bool		isAssignment(const std::string& key);
 bool		isOperator(const std::string& key);
 bool		isType(const std::string& statement);
@@ -151,21 +150,6 @@ bool		isLoop(const std::string& statement);
 bool		isCondition(const std::string& statement);
 bool		isConditionOperator(const std::string& statement);
 bool		varNameCheck(const std::string& name);
-
-int			toInt(const std::string& str);
-
-
-std::string::const_iterator	search(std::string::const_iterator start, \
-									std::string::const_iterator end, \
-									char key);
-std::string::const_iterator	search(std::string::const_iterator start, \
-									std::string::const_iterator end, \
-									const std::string& key);
-
-std::string	extractString(std::string::const_iterator start, \
-							std::string::const_iterator end, char key);
-std::string	extractString(std::string::const_iterator start, \
-							std::string::const_iterator end);
 
 /*-----------LATIN-SCRIPT CLASS-----------*/
 

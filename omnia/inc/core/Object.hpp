@@ -4,6 +4,8 @@
 # include <iostream>
 # include <string>
 
+# include "Utils.hpp"
+
 class Object {
 public:
 	std::string	type;

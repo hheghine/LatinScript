@@ -5,6 +5,11 @@
 # include <vector>
 # include <string>
 
+// # include "Utils.hpp"
+
+using svector = std::vector<std::string>;
+
+
 class Functio {
 	public:
 		std::string	_name;
@@ -13,7 +18,7 @@ class Functio {
 		std::vector<std::string> _body;
 
 	public:
-		// Functio(std::string name);
+		Functio(const std::string& declaration);
 		~Functio() = default;
 };
 

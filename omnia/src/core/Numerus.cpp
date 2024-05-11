@@ -1,19 +1,5 @@
 #include "Numerus.hpp"
 
-int	toInt(const std::string& str)
-{
-	std::stringstream ss(str);
-	int val = 0;
-	char remaining;
-
-	if (!(ss >> val) || ss.get(remaining))
-	{
-		std::cout << val << std::endl;
-		throw std::invalid_argument("invalid assignment operation: " + str);
-	}
-	return val;
-}
-
 Numerus::Numerus()
 	: Object("numerus", new int{0}, 0)
 {
@@ -40,7 +26,7 @@ void	Numerus::setValue(const Object* rhs)
 void	Numerus::setValue(const std::string& rhs)
 {
 	if (std::isdigit(rhs[0]) || rhs[0] == '-' || rhs[0] == '+')
-		setValue(new int(toInt(rhs)));
+		setValue(new int(utils::toInt(rhs)));
 }
 
 void	Numerus::setValue(void* ptr)
@@ -53,7 +39,7 @@ void	Numerus::setValue(void* ptr)
 void	Numerus::addition(const std::string& rhs)
 {
 	if (std::isdigit(rhs[0]) || rhs[0] == '-' || rhs[0] == '+')
-		*(int *)value += toInt(rhs);
+		*(int *)value += utils::toInt(rhs);
 	else
 		throw std::invalid_argument("invalid argument: " + rhs);
 }
@@ -69,7 +55,7 @@ void	Numerus::addition(const Object* rhs)
 void	Numerus::substraction(const std::string& rhs)
 {
 	if (std::isdigit(rhs[0]) || rhs[0] == '-' || rhs[0] == '+')
-		*(int *)value -= toInt(rhs);
+		*(int *)value -= utils::toInt(rhs);
 	else
 		throw std::invalid_argument("invalid argument: " + rhs);
 }
@@ -85,7 +71,7 @@ void	Numerus::substraction(const Object* rhs)
 void	Numerus::multiplication(const std::string& rhs)
 {
 	if (std::isdigit(rhs[0]) || rhs[0] == '-' || rhs[0] == '+')
-		*(int *)value *= toInt(rhs);
+		*(int *)value *= utils::toInt(rhs);
 	else
 		throw std::invalid_argument("invalid argument: " + rhs);
 }
@@ -101,7 +87,7 @@ void	Numerus::multiplication(const Object* rhs)
 void	Numerus::division(const std::string& rhs)
 {
 	if (std::isdigit(rhs[0]) || rhs[0] == '-' || rhs[0] == '+')
-		*(int *)value /= toInt(rhs);
+		*(int *)value /= utils::toInt(rhs);
 	else
 		throw std::invalid_argument("invalid argument: " + rhs);
 }
@@ -117,7 +103,7 @@ void	Numerus::division(const Object* rhs)
 bool	Numerus::isEqual(const std::string& rhs)
 {
 	if (std::isdigit(rhs[0]) || rhs[0] == '-' || rhs[0] == '+')
-		return *((int *)value) == toInt(rhs);
+		return *((int *)value) == utils::toInt(rhs);
 	throw std::invalid_argument("invalid argument: " + rhs);
 }
 
@@ -131,7 +117,7 @@ bool	Numerus::isEqual(const Object* rhs)
 bool	Numerus::isGreater(const std::string& rhs)
 {
 	if (std::isdigit(rhs[0]) || rhs[0] == '-' || rhs[0] == '+')
-		return *((int *)value) > toInt(rhs);
+		return *((int *)value) > utils::toInt(rhs);
 	throw std::invalid_argument("invalid argument: " + rhs);
 }
 
@@ -145,7 +131,7 @@ bool	Numerus::isGreater(const Object* rhs)
 bool	Numerus::isLess(const std::string& rhs)
 {
 	if (std::isdigit(rhs[0]) || rhs[0] == '-' || rhs[0] == '+')
-		return *((int *)value) < toInt(rhs);
+		return *((int *)value) < utils::toInt(rhs);
 	throw std::invalid_argument("invalid argument: " + rhs);
 }
 
