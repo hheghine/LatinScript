@@ -60,6 +60,6 @@ dum < x > 35 >
 scribere << *still working fine*
 
 
-#functio sum < numerus a, numerus b > : numerus
+functio sum < numerus a, numerus b > : numerus
 #	return a + b
 

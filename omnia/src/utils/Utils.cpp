@@ -1,7 +1,6 @@
-#include "LatinScript.hpp"
 #include "Utils.hpp"
 
-ls::svector	utils::splitLine(const std::string& line)
+utils::svector	utils::splitLine(const std::string& line)
 {
 	std::stringstream ss(line);
 
@@ -22,6 +21,54 @@ int	utils::toInt(const std::string& str)
 	if (!(ss >> val) || ss.get(remaining))
 		throw std::invalid_argument("invalid assignment operation: " + str);
 	return val;
+}
+
+bool	utils::varNameCheck(const std::string& name)
+{
+	for (auto it = utils::reserved.begin(); it != utils::reserved.end(); ++it)
+		if (name == *it)
+			return false;
+
+	if ((name[0] >= 65 && name[0] <= 90) || \
+		(name[0] >= 97 && name[0] <= 122) || \
+		name[0] == '_')
+		return true;
+
+	return false;
+}
+
+// statement == "arredo" || statement == "functio"
+bool	utils::isType(const std::string& statement)
+{
+	return (statement == "numerus" || statement == "filum" \
+		|| statement == "verum" || statement == "duplus");
+}
+
+bool	utils::isLoop(const std::string& statement)
+{
+	return statement == "dum";
+}
+
+bool	utils::isCondition(const std::string& statement)
+{
+	return (statement == "<" || statement == "<<" || statement == "<<<");
+}
+
+bool	utils::isConditionOperator(const std::string& statement)
+{
+	return (statement == "==" || statement == ">" || statement == "<" || \
+			statement == ">=" || statement == "<=");
+}
+
+bool	utils::isAssignment(const std::string& key)
+{
+	return key == "=";
+}
+
+bool	utils::isOperator(const std::string& key)
+{
+	return (key == "=" || key == "+" || key == "-" \
+			|| key == "*" || key == "/");
 }
 
 std::string::const_iterator	utils::search(std::string::const_iterator start, \

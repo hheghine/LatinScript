@@ -102,7 +102,7 @@ void	LatinScript::mainLoop(std::ifstream& file, const std::string& line)
 		(vec[0] == "<<<" && (__if || __elseif)))
 		_ignore = true;
 
-	if (_ignore && (line[0] == '\t' || isCondition(vec[0])))
+	if (_ignore && (line[0] == '\t' || utils::isCondition(vec[0])))
 		return ;
 	if (line[0] == '#')
 		return ;
@@ -110,7 +110,7 @@ void	LatinScript::mainLoop(std::ifstream& file, const std::string& line)
 	displayInput(vec);
 
 	auto it = vec.begin();
-	if(isType(vec[0]))
+	if(utils::isType(vec[0]))
 	{
 		createVariable(vec);
 
@@ -127,7 +127,7 @@ void	LatinScript::mainLoop(std::ifstream& file, const std::string& line)
 	}
 	else if (vars.find(vec[0]) != vars.end())
 		it += 1;
-	else if (isCondition(vec[0]))
+	else if (utils::isCondition(vec[0]))
 	{
 		handleCondition(vec);
 		if (!conditionBlockTrue(vec[0]))
@@ -143,12 +143,12 @@ void	LatinScript::mainLoop(std::ifstream& file, const std::string& line)
 			_output = true;
 		}
 	}
-	else if (isLoop(vec[0]))
+	else if (utils::isLoop(vec[0]))
 		handleLoop(file, line);
 	else if (vec[0] == "scribere")
 		handleOutput(vec, line);
-	// else if (vec[0] == "functio")
-		// handleFunction(file, line);
+	else if (vec[0] == "functio")
+		handleFunction(file, line);
 	else
 		throw std::invalid_argument("bad start statement: " + vec[0]);
 	handleStatement(vec, it);
@@ -185,11 +185,32 @@ void	LatinScript::handleLoop(std::ifstream& file, const std::string& condition)
 	}
 }
 
+void	LatinScript::handleFunction(std::ifstream& file, const std::string& declaration)
+{
+	(void) file;
+
+	// std::cout << declaration << std::endl;
+	
+	Functio* func = new Functio(declaration);
+
+	std::cout << " func name: " << func->_name \
+	<< " func ret-type: " << func->_return_type \
+	<< " return ptr: " << (void *)func->_return << std::endl;
+
+	for (auto it = func->vars.begin(); it != func->vars.end(); ++it)
+	{
+		std::cout << " name: " << it->first << " obj type: " << it->second->type << std::endl;
+	} 
+
+	delete func;
+
+}
+
 void	LatinScript::createVariable(const std::vector<std::string>& vec)
 {
 	if (vec.size() < 2)
 		throw std::invalid_argument("syntax error");
-	if (!varNameCheck(vec[1]))
+	if (!utils::varNameCheck(vec[1]))
 		throw std::invalid_argument("invalid variable name: " + vec[1]);
 	if (vars.find(vec[1]) != vars.end())
 			throw std::invalid_argument("redefinition: " + vec[1]);
@@ -202,7 +223,7 @@ void	LatinScript::createVariable(const std::vector<std::string>& vec)
 
 void	LatinScript::handleStatement(const svector& vec, const_iterator it)
 {
-	if (isOperator(*it))
+	if (utils::isOperator(*it))
 		handleOperator(vec, it - 1, it);
 }
 
@@ -381,7 +402,7 @@ void	LatinScript::handleCondition(const svector& vec)
 	__elseif = false;
 	__else = true;
 
-	if (((_is_if || _is_elseif) && vec.size() != 5 && !isConditionOperator(vec.at(2))) || \
+	if (((_is_if || _is_elseif) && vec.size() != 5 && !utils::isConditionOperator(vec.at(2))) || \
 		*(vec.end() - 1) != ">")
 		throw std::invalid_argument("wrong condition syntax");
 
@@ -487,52 +508,4 @@ bool	LatinScript::handleIsLessOrEq(const std::string& lhs, const std::string& rh
 	if (vars.find(rhs) != vars.end())
 		return vars[lhs]->isGreaterOrEq(vars[rhs]);
 	return vars[lhs]->isGreaterOrEq(rhs);
-}
-
-// statement == "arredo" || statement == "functio"
-bool	ls::isType(const std::string& statement)
-{
-	return (statement == "numerus" || statement == "filum" \
-		|| statement == "verum" || statement == "duplus");
-}
-
-bool	ls::isLoop(const std::string& statement)
-{
-	return statement == "dum";
-}
-
-bool	ls::isCondition(const std::string& statement)
-{
-	return (statement == "<" || statement == "<<" || statement == "<<<");
-}
-
-bool	ls::isConditionOperator(const std::string& statement)
-{
-	return (statement == "==" || statement == ">" || statement == "<" || \
-			statement == ">=" || statement == "<=");
-}
-
-bool	ls::isAssignment(const std::string& key)
-{
-	return key == "=";
-}
-
-bool	ls::isOperator(const std::string& key)
-{
-	return (key == "=" || key == "+" || key == "-" \
-			|| key == "*" || key == "/");
-}
-
-bool	ls::varNameCheck(const std::string& name)
-{
-	for (auto it = ls::reserved.begin(); it != ls::reserved.end(); ++it)
-		if (name == *it)
-			return false;
-
-	if ((name[0] >= 65 && name[0] <= 90) || \
-		(name[0] >= 97 && name[0] <= 122) || \
-		name[0] == '_')
-		return true;
-
-	return false;
 }

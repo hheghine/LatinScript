@@ -83,21 +83,6 @@ const std::unordered_map<std::string, conditions> condition_map = {
 	{"<=", conditions::LESS_EQ}
 };
 
-/*-------------RESERVED NAMES-------------*/
-
-const svector reserved = {
-	{"numerus"},	/* int		*/
-	{"filum"},		/* string	*/
-	{"verum"},		/* bool		*/
-	{"duplus"},		/* double	*/
-	{"dum"},		/* while	*/
-	{"scribere"},	/* cout		*/
-	{"arredo"},		/* array	*/
-	{"tmp"},
-	{"__lhs"},
-	{"__rhs"}
-};
-
 /*----------------MESSAGES----------------*/
 
 inline static void	usage()
@@ -140,16 +125,6 @@ inline static void	displayOutput(bool flag, const std::string& message)
 
 	std::cout << CRST << std::endl;
 }
-
-/*------------------UTILS------------------*/
-
-bool		isAssignment(const std::string& key);
-bool		isOperator(const std::string& key);
-bool		isType(const std::string& statement);
-bool		isLoop(const std::string& statement);
-bool		isCondition(const std::string& statement);
-bool		isConditionOperator(const std::string& statement);
-bool		varNameCheck(const std::string& name);
 
 /*-----------LATIN-SCRIPT CLASS-----------*/
 
@@ -206,7 +181,7 @@ class LatinScript {
 		bool	conditionBlockTrue(const std::string& block);
 
 		void	handleLoop(std::ifstream& file, const std::string& condition);
-		// void	handleFunction(std::ifstream& file, const std::string& declaration);
+		void	handleFunction(std::ifstream& file, const std::string& declaration);
 
 };
 
