@@ -5,6 +5,26 @@ Functio::Functio(const std::string& declaration)
 	, _return_type("")
 	, _return (nullptr)
 {
+	try {
+		parse(declaration);
+	} catch (const std::exception& e) {
+		std::cout << RED << "[ ✘\t\t\t]" << "\terror: " \
+		<< e.what() << CRST << std::endl;
+	}
+}
+
+Functio::~Functio()
+{
+	if (_return)
+		delete _return;
+
+	for (auto it = vars.begin(); it != vars.end(); ++it)
+		delete it->second;
+	vars.clear();
+}
+
+void	Functio::parse(const std::string& declaration)
+{
 	svector decl_vec = utils::splitLine(declaration);
 
 	if (!utils::varNameCheck(decl_vec.at(1)))
@@ -49,20 +69,24 @@ Functio::Functio(const std::string& declaration)
 			throw std::invalid_argument("wrong function syntax: invalid characters: " + *it);
 		it ++;
 		_return_type = *it;
-		// _return = createVar(_return_type);
-	}
-}
+		_return = createVar(_return_type);
 
-Functio::~Functio()
-{
-	for (auto it = vars.begin(); it != vars.end(); ++it)
-		delete it->second;
-	vars.clear();
+		it ++;
+
+		if (it != decl_vec.end())
+			throw std::invalid_argument("wrong function syntax: " + *it);
+	}
 }
 
 Object*	Functio::createVar(const std::string& type)
 {
 	if (type == "numerus")
 		return new Numerus();
-	return nullptr;
+	throw std::invalid_argument("unknown return type: " + type);
+}
+
+void	Functio::setBody(const svector& body)
+{
+	for (auto it = body.begin(); it != body.end(); ++it)
+		_body.push_back(*it);
 }

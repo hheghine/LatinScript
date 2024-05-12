@@ -10,6 +10,10 @@
 # include "Numerus.hpp"
 # include "Utils.hpp"
 
+const char* const RED = "\033[0;31m";
+const char* const CRST = "\033[0m";
+
+
 using svector = std::vector<std::string>;
 
 
@@ -27,7 +31,11 @@ class Functio {
 		Functio(const std::string& declaration);
 		~Functio();
 
+		void	setBody(const svector& body);
+		Object*	run();
+
 	private:
+		void	parse(const std::string& declaration);
 		Object*	createVar(const std::string& type);
 };
 

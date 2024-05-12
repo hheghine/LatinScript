@@ -182,7 +182,6 @@ class LatinScript {
 
 		void	handleLoop(std::ifstream& file, const std::string& condition);
 		void	handleFunction(std::ifstream& file, const std::string& declaration);
-
 };
 
 
