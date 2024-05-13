@@ -105,7 +105,7 @@ void	LatinScript::handleFunction(std::ifstream& file, const std::string& declara
 }
 */
 
-/*
+
 void	LatinScript::createVariable(const std::vector<std::string>& vec)
 {
 	if (vec.size() < 2)
@@ -120,7 +120,6 @@ void	LatinScript::createVariable(const std::vector<std::string>& vec)
 		objects.insert(vars[vec[1]]);
 	}
 }
-*/
 
 void	LatinScript::handleStatement(const svector& vec, const_iterator it)
 {

@@ -131,10 +131,6 @@ void	ScriptRunner::createVariable(const std::vector<std::string>& vec)
 
 void	ScriptRunner::handleFunction(std::ifstream& file, const std::string& declaration)
 {
-	(void) file;
-
-	// std::cout << declaration << std::endl;
-	
 	Functio* func = new Functio(declaration);
 
 	std::cout << " func name: " << func->_name \
@@ -143,8 +139,26 @@ void	ScriptRunner::handleFunction(std::ifstream& file, const std::string& declar
 
 	for (auto it = func->vars.begin(); it != func->vars.end(); ++it)
 	{
-		std::cout << " name: " << it->first << " obj type: " << it->second->type << std::endl;
-	} 
+		int* ptr = new int(4);
+		it->second->setValue(ptr);
+		std::cout << " name: " << it->first << " obj val: " << *((int *)it->second->value) << std::endl;
+	}
+
+
+	svector		body;
+	std::string	line;
+
+	while(std::getline(file, line))
+	{
+		if (line[0] != '\t')
+			break ;
+		body.push_back(line);
+	}
+
+	func->setBody(body);
+	func->main_loop();
+
+	std::cout << "RESULT: " << *((int *)func->_return->value) << std::endl;
 
 	delete func;
 

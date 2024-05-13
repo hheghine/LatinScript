@@ -19,9 +19,9 @@ Functio::~Functio()
 	if (_return)
 		delete _return;
 
-	for (auto it = vars.begin(); it != vars.end(); ++it)
-		delete it->second;
-	vars.clear();
+	for (auto it = objects.begin(); it != objects.end(); ++it)
+		delete *it;
+	objects.clear();
 }
 
 void	Functio::letsGo(const std::string& declaration)
@@ -57,6 +57,7 @@ void	Functio::letsGo(const std::string& declaration)
 		if (var_name[var_name.size() - 1] == ',')
 			var_name.erase(var_name.end() - 1);
 		vars[var_name] = createVar(*(it - 1));
+		objects.insert(vars[var_name]);
 	}
 
 	if (!closed)
@@ -92,75 +93,99 @@ void	Functio::setBody(const svector& body)
 		_body.push_back(*it);
 }
 
-void	Functio::mainLoop(std::ifstream& file, const std::string& line)
+void	Functio::main_loop()
 {
-	(void) file;
-	(void) line;
-
-/*
-	_output = false;
-	if (_ignore && line[0] == '\t' && line[1] == '\t')
-		return ;
-	_ignore = false;
-	svector vec = utils::splitLine(line);
-	if (vec.empty())
-		return ;
-	if ((vec[0] == "<<" && __if) || \
-		(vec[0] == "<<" && _is_elseif && __elseif) || \
-		(vec[0] == "<<<" && (__if || __elseif)))
-		_ignore = true;
-
-	if (_ignore && ((line[0] == '\t' && line[1] == '\t') || utils::isCondition(vec[0])))
-		return ;
-	if (line[0] == '#')
-		return ;
-
-	displayInput(vec);
-
-	auto it = vec.begin();
-	if(utils::isType(vec[0]))
+	for (auto iter = _body.begin(); iter != _body.end(); ++iter)
 	{
-		createVariable(vec);
+		std::string line = *iter;
 
-		if (vec.begin() + 2 == vec.end())
-		{
-			displayOutput(false, "");
+		_output = false;
+		if (_ignore && line[0] == '\t' && line[1] == '\t')
 			return ;
-		}
-
-		it += 2;
-
-		if (vec[2] != "=")
-			throw std::invalid_argument("wrong operation: " + vec[2]);
-	}
-	else if (vars.find(vec[0]) != vars.end())
-		it += 1;
-	else if (utils::isCondition(vec[0]))
-	{
-		handleCondition(vec);
-		if (!conditionBlockTrue(vec[0]))
-		{
-			displayOutput(true, "false");
-			_output = true;
+		_ignore = false;
+		svector vec = utils::splitLine(line);
+		if (vec.empty())
+			return ;
+		if ((vec[0] == "<<" && __if) || \
+			(vec[0] == "<<" && _is_elseif && __elseif) || \
+			(vec[0] == "<<<" && (__if || __elseif)))
 			_ignore = true;
+
+		if (_ignore && ((line[0] == '\t' && line[1] == '\t') || utils::isCondition(vec[0])))
 			return ;
+		if (line[0] == '#')
+			return ;
+
+		displayInput(vec);
+
+		auto it = vec.begin();
+		if(utils::isType(vec[0]))
+		{
+			createVariable(vec);
+
+			if (vec.begin() + 2 == vec.end())
+			{
+				displayOutput(false, "");
+				return ;
+			}
+
+			it += 2;
+
+			if (vec[2] != "=")
+				throw std::invalid_argument("wrong operation: " + vec[2]);
+		}
+		else if (vars.find(vec[0]) != vars.end())
+			it += 1;
+		else if (utils::isCondition(vec[0]))
+		{
+			handleCondition(vec);
+			if (!conditionBlockTrue(vec[0]))
+			{
+				displayOutput(true, "false");
+				_output = true;
+				_ignore = true;
+				return ;
+			}
+			else
+			{
+				displayOutput(true, "true");
+				_output = true;
+			}
+		}
+		// else if (utils::isLoop(vec[0]))
+		// 	handleLoop(file, line);
+		else if (vec[0] == "scribere")
+			handleOutput(vec, line);
+		else if (vec[0] =="redire")
+		{
+			handleReturn(vec);
+			break ;
 		}
 		else
-		{
-			displayOutput(true, "true");
-			_output = true;
-		}
+			throw std::invalid_argument("bad start statement: " + vec[0]);
+		handleStatement(vec, it);
+		if (!_output)
+			displayOutput(false, "");
 	}
-	else if (utils::isLoop(vec[0]))
-		handleLoop(file, line);
-	else if (vec[0] == "scribere")
-		handleOutput(vec, line);
-	else if (vec[0] == "functio")
-		handleFunction(file, line);
-	else
-		throw std::invalid_argument("bad start statement: " + vec[0]);
-	handleStatement(vec, it);
-	if (!_output)
-		displayOutput(false, "");
-	*/
+}
+
+void	Functio::handleReturn(const svector& vec)
+{
+	vars["_"] = createVar(_return->type);
+
+	svector vec1;
+
+	vec1.push_back("_");
+	vec1.push_back("=");
+
+	for (auto it = vec.begin() + 1; it != vec.end(); ++it)
+		vec1.push_back(*it);
+
+	const_iterator iter = vec1.begin() + 1;
+	handleOperator(vec1, vec1.begin(), iter);
+
+	_return->setValue(vars["_"]->value);
+	vars["_"]->value = nullptr;
+	delete vars["_"];
+	vars.erase("_");
 }

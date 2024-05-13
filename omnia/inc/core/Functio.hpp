@@ -20,13 +20,13 @@ class Functio : public LatinScript {
 		~Functio();
 
 		void	setBody(const svector& body);
-		Object*	run();
+		void	main_loop();
 
 	private:
 		void	letsGo(const std::string& declaration);
-		void	mainLoop(std::ifstream& file, const std::string& line);
 
 		Object*	createVar(const std::string& type);
+		void	handleReturn(const svector& vec);
 };
 
 #endif
