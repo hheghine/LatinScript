@@ -131,16 +131,16 @@ inline static void	displayOutput(bool flag, const std::string& message)
 class LatinScript {
 
 	public:
-		LatinScript(const std::string& filename);
-		~LatinScript();
+		LatinScript();
+		virtual ~LatinScript() {}
 
-	private:
+	protected:
 		std::unordered_map<std::string, Object *> vars;
 		std::unordered_set<Object *> objects;
 
-		std::unordered_map<std::string, Functio *> functions;
+		// std::unordered_map<std::string, Functio *> functions;
 	
-	private:
+	protected:
 		bool _output;
 		bool _chainedOperations;
 		bool _isAssignment;
@@ -155,11 +155,9 @@ class LatinScript {
 
 		bool _ignore;
 
-	private:
-
-		void	letsGo(const std::string& filename);
-
-		void	mainLoop(std::ifstream& file, const std::string& line);
+	protected:
+		virtual void	letsGo(const std::string& filename) = 0;
+		virtual void	mainLoop(std::ifstream& file, const std::string& line) = 0;
 
 		void	createVariable(const svector& vec);
 		void	handleStatement(const svector& vec, const_iterator it);

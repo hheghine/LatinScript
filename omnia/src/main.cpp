@@ -1,4 +1,4 @@
-#include "LatinScript.hpp"
+#include "ScriptRunner.hpp"
 
 int	main(int ac, char **av)
 {
@@ -8,7 +8,7 @@ int	main(int ac, char **av)
 		return 0;
 	}
 
-	ls::LatinScript script(av[1]);
+	ScriptRunner script(av[1]);
 
 	return 0;
 }
