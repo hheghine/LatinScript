@@ -82,6 +82,7 @@ void	LatinScript::handleLoop(std::ifstream& file, const std::string& condition)
 	}
 }
 
+/*
 void	LatinScript::handleFunction(std::ifstream& file, const std::string& declaration)
 {
 	(void) file;
@@ -102,7 +103,9 @@ void	LatinScript::handleFunction(std::ifstream& file, const std::string& declara
 	delete func;
 
 }
+*/
 
+/*
 void	LatinScript::createVariable(const std::vector<std::string>& vec)
 {
 	if (vec.size() < 2)
@@ -117,6 +120,7 @@ void	LatinScript::createVariable(const std::vector<std::string>& vec)
 		objects.insert(vars[vec[1]]);
 	}
 }
+*/
 
 void	LatinScript::handleStatement(const svector& vec, const_iterator it)
 {

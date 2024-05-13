@@ -113,3 +113,39 @@ void	ScriptRunner::mainLoop(std::ifstream& file, const std::string& line)
 	if (!_output)
 		displayOutput(false, "");
 }
+
+void	ScriptRunner::createVariable(const std::vector<std::string>& vec)
+{
+	if (vec.size() < 2)
+		throw std::invalid_argument("syntax error");
+	if (!utils::varNameCheck(vec[1]))
+		throw std::invalid_argument("invalid variable name: " + vec[1]);
+	if (vars.find(vec[1]) != vars.end())
+			throw std::invalid_argument("redefinition: " + vec[1]);
+	if (vec[0] == "numerus")
+	{
+		vars[vec[1]] = new Numerus();
+		objects.insert(vars[vec[1]]);
+	}
+}
+
+void	ScriptRunner::handleFunction(std::ifstream& file, const std::string& declaration)
+{
+	(void) file;
+
+	// std::cout << declaration << std::endl;
+	
+	Functio* func = new Functio(declaration);
+
+	std::cout << " func name: " << func->_name \
+	<< " func ret-type: " << func->_return_type \
+	<< " return ptr: " << (void *)func->_return << std::endl;
+
+	for (auto it = func->vars.begin(); it != func->vars.end(); ++it)
+	{
+		std::cout << " name: " << it->first << " obj type: " << it->second->type << std::endl;
+	} 
+
+	delete func;
+
+}

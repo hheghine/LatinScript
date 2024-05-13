@@ -15,7 +15,7 @@
 # include <chrono>
 
 # include "Numerus.hpp"
-# include "Functio.hpp"
+// # include "Functio.hpp"
 # include "Utils.hpp"
 
 namespace ls
@@ -134,7 +134,7 @@ class LatinScript {
 		LatinScript();
 		virtual ~LatinScript() {}
 
-	protected:
+	public:
 		std::unordered_map<std::string, Object *> vars;
 		std::unordered_set<Object *> objects;
 
@@ -179,7 +179,7 @@ class LatinScript {
 		bool	conditionBlockTrue(const std::string& block);
 
 		void	handleLoop(std::ifstream& file, const std::string& condition);
-		void	handleFunction(std::ifstream& file, const std::string& declaration);
+		// void	handleFunction(std::ifstream& file, const std::string& declaration);
 };
 
 
