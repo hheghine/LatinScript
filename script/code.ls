@@ -61,5 +61,9 @@
 #
 #
 functio sum < numerus a, numerus b > : numerus
-	redire a + b
+	numerus x = 4
+	redire a + b + x
+	scribere << *AAAA*
+
+scribere << *BBBB*
 

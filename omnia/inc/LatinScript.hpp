@@ -137,8 +137,6 @@ class LatinScript {
 	public:
 		std::unordered_map<std::string, Object *> vars;
 		std::unordered_set<Object *> objects;
-
-		// std::unordered_map<std::string, Functio *> functions;
 	
 	protected:
 		bool _output;
@@ -180,7 +178,6 @@ class LatinScript {
 		bool	conditionBlockTrue(const std::string& block);
 
 		void	handleLoop(std::ifstream& file, const std::string& condition);
-		// void	handleFunction(std::ifstream& file, const std::string& declaration);
 };
 
 

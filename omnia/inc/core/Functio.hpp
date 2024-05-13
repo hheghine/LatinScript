@@ -13,12 +13,11 @@ class Functio : public LatinScript {
 		std::vector<std::string>	_body;
 		Object*						_return;
 
-		// std::unordered_map<std::string, Object *> vars;
-
 	public:
 		Functio(const std::string& declaration);
 		~Functio();
 
+	public:
 		void	setBody(const svector& body);
 		void	main_loop();
 

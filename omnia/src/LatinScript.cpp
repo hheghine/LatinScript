@@ -14,14 +14,6 @@ LatinScript::LatinScript()
 	, _ignore(false)
 {}
 
-// LatinScript::~LatinScript()
-// {
-// 	for (auto it = objects.begin(); it != objects.end(); ++it)
-// 		delete *it;
-// 	objects.clear();
-// }
-
-
 void	LatinScript::handleOutput(const svector& vec, const std::string& line)
 {
 	if (vec.begin() + 1 == vec.end() || *(vec.begin() + 1) != "<<")
@@ -81,30 +73,6 @@ void	LatinScript::handleLoop(std::ifstream& file, const std::string& condition)
 		__if = false;
 	}
 }
-
-/*
-void	LatinScript::handleFunction(std::ifstream& file, const std::string& declaration)
-{
-	(void) file;
-
-	// std::cout << declaration << std::endl;
-	
-	Functio* func = new Functio(declaration);
-
-	std::cout << " func name: " << func->_name \
-	<< " func ret-type: " << func->_return_type \
-	<< " return ptr: " << (void *)func->_return << std::endl;
-
-	for (auto it = func->vars.begin(); it != func->vars.end(); ++it)
-	{
-		std::cout << " name: " << it->first << " obj type: " << it->second->type << std::endl;
-	} 
-
-	delete func;
-
-}
-*/
-
 
 void	LatinScript::createVariable(const std::vector<std::string>& vec)
 {

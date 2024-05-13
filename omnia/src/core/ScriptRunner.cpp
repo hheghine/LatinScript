@@ -6,8 +6,8 @@ ScriptRunner::ScriptRunner(const std::string& filename)
 	try {
 		letsGo(filename);
 	} catch (const std::exception& e) {
-		std::cout << ls::RED << "[ ✘\t\t\t]" << "\terror: " \
-		<< e.what() << ls::CRST << std::endl;
+		std::cout << RED << "[ ✘\t\t\t]" << "\terror: " \
+		<< e.what() << CRST << std::endl;
 	}
 }
 
