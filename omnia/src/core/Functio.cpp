@@ -198,11 +198,11 @@ void	Functio::handleAssignment(const svector& vec, const_iterator lhs, const_ite
 
 	std::string toChange = _chainedOperations ? "tmp" : *lhs;
 
-	if (functions.find(*it) != functions.end())
+	if (g_functions.find(*it) != g_functions.end())
 	{
-		if (functions[*it]->_return_type != vars[toChange]->type)
+		if (g_functions[*it]->_return_type != vars[toChange]->type)
 			throw std::invalid_argument("blabla");
-		functions[*it]->main_loop();
+		g_functions[*it]->main_loop();
 	}
 	/* another (valid?) object => set the pointer to point that object */
 	else if (vars.find(*it) != vars.end() && \

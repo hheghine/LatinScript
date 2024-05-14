@@ -5,8 +5,8 @@ using namespace ls;
 /********************
 *	GLOBAL VARIABLE
 *********************/
-std::unordered_map<std::string, Functio *> functions;
-
+std::unordered_map<std::string, Functio *> g_functions;
+std::stack<std::unordered_map<std::string, svector>> _function_args;
 
 
 ScriptRunner::ScriptRunner(const std::string& filename)
@@ -26,9 +26,9 @@ ScriptRunner::~ScriptRunner()
 		delete *it;
 	objects.clear();
 
-	for (auto it = functions.begin(); it != functions.end(); ++it)
+	for (auto it = g_functions.begin(); it != g_functions.end(); ++it)
 		delete it->second;
-	functions.clear();
+	g_functions.clear();
 }
 
 void	ScriptRunner::letsGo(const std::string& filename)
@@ -164,12 +164,12 @@ void	ScriptRunner::parseFunction(std::ifstream& file, const std::string& declara
 	vars["a"]->setValue(new int(4));
 	vars["b"]->setValue(new int(5));
 
-	if (functions.find(func->_name) != functions.end())
+	if (g_functions.find(func->_name) != g_functions.end())
 	{
 		delete func;
 		throw std::invalid_argument("function redefinition");
 	}
-	functions[func->_name] = func;
+	g_functions[func->_name] = func;
 }
 
 void	ScriptRunner::handleAssignment(const svector& vec, const_iterator lhs, const_iterator& it)
@@ -179,11 +179,11 @@ void	ScriptRunner::handleAssignment(const svector& vec, const_iterator lhs, cons
 
 	std::string toChange = _chainedOperations ? "tmp" : *lhs;
 
-	if (functions.find(*it) != functions.end())
+	if (g_functions.find(*it) != g_functions.end())
 	{
-		if (functions[*it]->_return_type != vars[toChange]->type)
+		if (g_functions[*it]->_return_type != vars[toChange]->type)
 			throw std::invalid_argument("blabla");
-		functions[*it]->main_loop();
+		g_functions[*it]->main_loop();
 	}
 	/* another (valid?) object => set the pointer to point that object */
 	else if (vars.find(*it) != vars.end() && \

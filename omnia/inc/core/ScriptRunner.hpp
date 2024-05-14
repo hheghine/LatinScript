@@ -4,13 +4,15 @@
 # include "LatinScript.hpp"
 # include "Functio.hpp"
 
+# include <stack>
+
 using namespace ls;
 class Functio;
 
 /*---------------------GLOBAL VARIABLE---------------------*/
 
-extern std::unordered_map<std::string, Functio *> functions;
-
+extern std::unordered_map<std::string, Functio *> g_functions;
+extern std::stack<std::unordered_map<std::string, svector>> g_function_args;
 
 /*----------------------SCRIPT RUNNER----------------------*/
 
