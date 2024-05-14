@@ -189,3 +189,41 @@ void	Functio::handleReturn(const svector& vec)
 	delete vars["_"];
 	vars.erase("_");
 }
+
+
+void	Functio::handleAssignment(const svector& vec, const_iterator lhs, const_iterator& it)
+{
+	if (it == vec.end())
+		throw std::invalid_argument("invalid assignment operation");
+
+	std::string toChange = _chainedOperations ? "tmp" : *lhs;
+
+	if (functions.find(*it) != functions.end())
+	{
+		if (functions[*it]->_return_type != vars[toChange]->type)
+			throw std::invalid_argument("blabla");
+		functions[*it]->main_loop();
+	}
+	/* another (valid?) object => set the pointer to point that object */
+	else if (vars.find(*it) != vars.end() && \
+		vars[toChange]->type == vars[*it]->type)
+	{
+		if (_chainedOperations)
+		{
+			vars[toChange]->setValue(vars[*it]);
+		}
+		else
+		{
+			if (vars[toChange]->links == 1)
+			{
+				objects.erase(vars[toChange]);
+				delete vars[toChange];
+			}
+			vars[toChange] = vars[*it];
+			vars[*it]->links ++;
+		}
+	}
+	/* literal value */
+	else
+		vars[toChange]->setValue(*it);
+}

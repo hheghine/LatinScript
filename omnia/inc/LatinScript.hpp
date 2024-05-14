@@ -158,10 +158,10 @@ class LatinScript {
 		virtual void	mainLoop(std::ifstream& file, const std::string& line) { (void)file; (void)line; }
 
 		virtual void	handleOperator(const svector& vec, const_iterator lhs, const_iterator& it);
+		virtual void	handleAssignment(const svector& vec, const_iterator lhs, const_iterator& it);
 
 		void	createVariable(const svector& vec);
 		void	handleStatement(const svector& vec, const_iterator it);
-		void	handleAssignment(const svector& vec, const_iterator lhs, const_iterator& it);
 		void	handleAddition(const svector& vec, const_iterator lhs, const_iterator& it);
 		void	handleSubstraction(const svector& vec, const_iterator lhs, const_iterator& it);
 		void	handleMultiplication(const svector& vec, const_iterator lhs, const_iterator& it);

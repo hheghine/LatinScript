@@ -2,6 +2,7 @@
 # define FUNCTIO_HPP
 
 # include "LatinScript.hpp"
+# include "ScriptRunner.hpp"
 
 using namespace ls;
 
@@ -23,6 +24,8 @@ class Functio : public LatinScript {
 
 	private:
 		void	letsGo(const std::string& declaration);
+
+		void	handleAssignment(const svector& vec, const_iterator lhs, const_iterator& it);
 
 		Object*	createVar(const std::string& type);
 		void	handleReturn(const svector& vec);

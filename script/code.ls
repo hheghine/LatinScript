@@ -60,10 +60,18 @@
 #scribere << *still working fine*
 #
 #
+
+numerus x = 1
+
 functio sum < numerus a, numerus b > : numerus
-	numerus x = 4
-	redire a + b + x
 	scribere << *AAAA*
+	< x == 0 >
+		a = sum
+	x = x - 1
+	redire a + b
+	
 
 scribere << *BBBB*
+
+numerus k = sum
 

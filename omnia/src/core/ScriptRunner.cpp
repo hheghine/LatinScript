@@ -1,5 +1,9 @@
 #include "ScriptRunner.hpp"
 
+using namespace ls;
+
+std::unordered_map<std::string, Functio *> functions;
+
 ScriptRunner::ScriptRunner(const std::string& filename)
 	: ls::LatinScript()
 {
@@ -16,6 +20,10 @@ ScriptRunner::~ScriptRunner()
 	for (auto it = objects.begin(); it != objects.end(); ++it)
 		delete *it;
 	objects.clear();
+
+	for (auto it = functions.begin(); it != functions.end(); ++it)
+		delete it->second;
+	functions.clear();
 }
 
 void	ScriptRunner::letsGo(const std::string& filename)
@@ -106,7 +114,7 @@ void	ScriptRunner::mainLoop(std::ifstream& file, const std::string& line)
 	else if (vec[0] == "scribere")
 		handleOutput(vec, line);
 	else if (vec[0] == "functio")
-		handleFunction(file, line);
+		parseFunction(file, line);
 	else
 		throw std::invalid_argument("bad start statement: " + vec[0]);
 	handleStatement(vec, it);
@@ -129,21 +137,9 @@ void	ScriptRunner::createVariable(const std::vector<std::string>& vec)
 	}
 }
 
-void	ScriptRunner::handleFunction(std::ifstream& file, const std::string& declaration)
+void	ScriptRunner::parseFunction(std::ifstream& file, const std::string& declaration)
 {
 	Functio* func = new Functio(declaration);
-
-	std::cout << " func name: " << func->_name \
-	<< " func ret-type: " << func->_return_type \
-	<< " return ptr: " << (void *)func->_return << std::endl;
-
-	for (auto it = func->vars.begin(); it != func->vars.end(); ++it)
-	{
-		int* ptr = new int(4);
-		it->second->setValue(ptr);
-		std::cout << " name: " << it->first << " obj val: " << *((int *)it->second->value) << std::endl;
-	}
-
 
 	svector		body;
 	std::string	line;
@@ -156,10 +152,51 @@ void	ScriptRunner::handleFunction(std::ifstream& file, const std::string& declar
 	}
 
 	func->setBody(body);
-	func->main_loop();
 
-	std::cout << "RESULT: " << *((int *)func->_return->value) << std::endl;
+	func->vars["a"]->setValue(new int(4));
+	func->vars["b"]->setValue(new int(5));
 
-	delete func;
+	if (functions.find(func->_name) != functions.end())
+	{
+		delete func;
+		throw std::invalid_argument("function redefinition");
+	}
+	functions[func->_name] = func;
+}
 
+void	ScriptRunner::handleAssignment(const svector& vec, const_iterator lhs, const_iterator& it)
+{
+	if (it == vec.end())
+		throw std::invalid_argument("invalid assignment operation");
+
+	std::string toChange = _chainedOperations ? "tmp" : *lhs;
+
+	if (functions.find(*it) != functions.end())
+	{
+		if (functions[*it]->_return_type != vars[toChange]->type)
+			throw std::invalid_argument("blabla");
+		functions[*it]->main_loop();
+	}
+	/* another (valid?) object => set the pointer to point that object */
+	else if (vars.find(*it) != vars.end() && \
+		vars[toChange]->type == vars[*it]->type)
+	{
+		if (_chainedOperations)
+		{
+			vars[toChange]->setValue(vars[*it]);
+		}
+		else
+		{
+			if (vars[toChange]->links == 1)
+			{
+				objects.erase(vars[toChange]);
+				delete vars[toChange];
+			}
+			vars[toChange] = vars[*it];
+			vars[*it]->links ++;
+		}
+	}
+	/* literal value */
+	else
+		vars[toChange]->setValue(*it);
 }
