@@ -153,8 +153,13 @@ void	ScriptRunner::parseFunction(std::ifstream& file, const std::string& declara
 
 	func->setBody(body);
 
-	func->vars["a"]->setValue(new int(4));
-	func->vars["b"]->setValue(new int(5));
+	// func->vars["a"]->setValue(new int(4));
+	// func->vars["b"]->setValue(new int(5));
+
+	vars["a"]->setValue(new int(4));
+	vars["b"]->setValue(new int(5));
+
+
 
 	if (functions.find(func->_name) != functions.end())
 	{

@@ -7,6 +7,8 @@
 using namespace ls;
 class Functio;
 
+// std::unordered_map<std::string, Object *> vars;
+
 extern std::unordered_map<std::string, Functio *> functions;
 
 class ScriptRunner : public LatinScript {

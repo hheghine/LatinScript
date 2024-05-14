@@ -18,6 +18,8 @@
 // # include "Functio.hpp"
 # include "Utils.hpp"
 
+extern std::unordered_map<std::string, Object *> vars;
+
 namespace ls
 {
 
@@ -128,6 +130,9 @@ inline static void	displayOutput(bool flag, const std::string& message)
 
 /*-----------LATIN-SCRIPT CLASS-----------*/
 
+// extern std::unordered_map<std::string, Object *> vars;
+
+
 class LatinScript {
 
 	public:
@@ -135,7 +140,7 @@ class LatinScript {
 		virtual ~LatinScript() {}
 
 	public:
-		std::unordered_map<std::string, Object *> vars;
+		// std::unordered_map<std::string, Object *> vars;
 		std::unordered_set<Object *> objects;
 	
 	protected:

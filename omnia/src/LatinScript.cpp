@@ -2,6 +2,8 @@
 
 using namespace ls;
 
+std::unordered_map<std::string, Object *> vars;
+
 LatinScript::LatinScript()
 	: _output(false)
 	, _chainedOperations(false)
