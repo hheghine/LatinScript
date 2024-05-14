@@ -6,6 +6,8 @@
 
 using namespace ls;
 
+/*---------------------FUNCTIO---------------------*/
+
 class Functio : public LatinScript {
 	public:
 		std::string					_name;

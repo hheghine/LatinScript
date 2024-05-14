@@ -63,15 +63,12 @@
 
 numerus x = 2
 
-
 functio sum < numerus a, numerus b > : numerus
 	scribere << *AAAA*
 	x = x - 1
 	< x > 0 >
 		a = sum
-	scribere << *x = * << x
 	redire a + b
-	
 
 scribere << *BBBB*
 

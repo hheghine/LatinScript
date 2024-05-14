@@ -18,7 +18,6 @@
 // # include "Functio.hpp"
 # include "Utils.hpp"
 
-extern std::unordered_map<std::string, Object *> vars;
 
 namespace ls
 {
@@ -44,6 +43,10 @@ const char* const CRST = "\033[0m";
 using svector = std::vector<std::string>;
 using iterator = svector::iterator;
 using const_iterator = svector::const_iterator;
+
+/*------------GLOBAL VARIABLES------------*/
+
+extern std::unordered_map<std::string, Object *> vars;
 
 /*---------------ENUM CLASS---------------*/
 

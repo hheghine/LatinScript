@@ -2,7 +2,10 @@
 
 using namespace ls;
 
-std::unordered_map<std::string, Object *> vars;
+/********************
+*	GLOBAL VARIABLE
+*********************/
+std::unordered_map<std::string, Object *> ls::vars;
 
 LatinScript::LatinScript()
 	: _output(false)
@@ -62,7 +65,7 @@ void	LatinScript::handleLoop(std::ifstream& file, const std::string& condition)
 		vec.push_back(line);
 	}
 	auto it = vec.begin();
-	// __if = true;
+
 	while (1)
 	{
 		handleCondition(condition_vec);

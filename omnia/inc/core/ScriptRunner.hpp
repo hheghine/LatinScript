@@ -7,17 +7,17 @@
 using namespace ls;
 class Functio;
 
-// std::unordered_map<std::string, Object *> vars;
+/*---------------------GLOBAL VARIABLE---------------------*/
 
 extern std::unordered_map<std::string, Functio *> functions;
+
+
+/*----------------------SCRIPT RUNNER----------------------*/
 
 class ScriptRunner : public LatinScript {
 	public:
 		explicit ScriptRunner(const std::string& filename);
 		~ScriptRunner();
-
-	// public:
-		// std::unordered_map<std::string, Functio *> functions;
 
 	private:
 		void	letsGo(const std::string& filename);

@@ -2,7 +2,12 @@
 
 using namespace ls;
 
+/********************
+*	GLOBAL VARIABLE
+*********************/
 std::unordered_map<std::string, Functio *> functions;
+
+
 
 ScriptRunner::ScriptRunner(const std::string& filename)
 	: ls::LatinScript()
@@ -158,8 +163,6 @@ void	ScriptRunner::parseFunction(std::ifstream& file, const std::string& declara
 
 	vars["a"]->setValue(new int(4));
 	vars["b"]->setValue(new int(5));
-
-
 
 	if (functions.find(func->_name) != functions.end())
 	{
