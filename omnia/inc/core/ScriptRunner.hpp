@@ -21,12 +21,12 @@ class ScriptRunner : public LatinScript {
 		explicit ScriptRunner(const std::string& filename);
 		~ScriptRunner();
 
+		static void	handleFunction(const svector& vec, const_iterator lhs, const_iterator& name);
 	private:
 		void	letsGo(const std::string& filename);
 		void	mainLoop(std::ifstream& file, const std::string& line);
-		void	handleAssignment(const svector& vec, const_iterator lhs, const_iterator& it);
-		void	handleFunction(const svector& vec, const_iterator lhs, const_iterator& name);
 		void	handleOperator(const svector& vec, const_iterator lhs, const_iterator& it);
+		void	handleAssignment(const svector& vec, const_iterator lhs, const_iterator& it);
 
 		void	createVariable(const std::vector<std::string>& vec);
 		void	parseFunction(std::ifstream& file, const std::string& declaration);

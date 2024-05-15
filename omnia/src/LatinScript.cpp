@@ -17,7 +17,6 @@ LatinScript::LatinScript()
 	, __elseif(false)
 	, __else(false)
 	, _ignore(false)
-	, _function_return(false)
 {}
 
 void	LatinScript::handleOutput(const svector& vec, const std::string& line)
@@ -86,8 +85,8 @@ void	LatinScript::createVariable(const std::vector<std::string>& vec)
 		throw std::invalid_argument("syntax error");
 	if (!utils::varNameCheck(vec[1]))
 		throw std::invalid_argument("invalid variable name: " + vec[1]);
-	if (vars.find(vec[1]) != vars.end())
-			throw std::invalid_argument("redefinition: " + vec[1]);
+	// if (vars.find(vec[1]) != vars.end())
+	// 		throw std::invalid_argument("redefinition: " + vec[1]);
 	if (vec[0] == "numerus")
 	{
 		vars[vec[1]] = new Numerus();
@@ -99,62 +98,6 @@ void	LatinScript::handleStatement(const svector& vec, const_iterator it)
 {
 	if (utils::isOperator(*it))
 		handleOperator(vec, it - 1, it);
-}
-
-void	LatinScript::handleOperator(const svector& vec, const_iterator lhs, const_iterator& it)
-{
-	if (vars.find(*(it - 1)) == vars.end())
-		throw std::invalid_argument("invalid assignment: " + *(it - 1));
-
-	_chainedOperations = false;
-	_isAssignment = false;
-	const_iterator final_lhs;
-
-	for (auto iter = it; iter != vec.end(); ++iter)
-	{
-		auto op = operator_map.find(*iter);
-		if (op == operator_map.end())
-			throw std::invalid_argument("unknown operator: " + *iter);
-
-		switch(op->second)
-		{
-			case operators::ASSIGNMENT :
-				_isAssignment = true;
-				/* if there's a chain of operations, creating a temporary object to
-				store the non-final value and then assigning the final value to actual lhs */
-				if (iter + 1 != vec.end() && iter + 2 != vec.end()
-				&& vars.find(*(iter - 1)) != vars.end())
-				{
-					Object* tmp = vars[*(iter - 1)]->clone();
-					objects.insert(tmp);
-					vars["tmp"] = tmp;
-					final_lhs = lhs;
-					_chainedOperations = true;
-				}
-				handleAssignment(vec, lhs, ++iter);
-				break ;
-			case operators::PLUS :
-				handleAddition(vec, lhs, ++iter);
-				break ;
-			case operators::MINUS :
-				handleSubstraction(vec, lhs, ++iter);
-				break ;
-			case operators::MULTIPLY :
-				handleMultiplication(vec, lhs, ++iter);
-				break ;
-			case operators::DIVIDE :
-				handleDivision(vec, lhs, ++iter);
-				break ;
-		}
-	}
-	/* assigning the final value to actual lhs */
-	if (_chainedOperations)
-	{
-		vars[*final_lhs]->setValue(vars["tmp"]);
-		objects.erase(vars["tmp"]);
-		delete vars["tmp"];
-		_chainedOperations = false;
-	}
 }
 
 void	LatinScript::handleAssignment(const svector& vec, const_iterator lhs, const_iterator& it)

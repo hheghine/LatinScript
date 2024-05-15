@@ -15,7 +15,9 @@ ScriptRunner::ScriptRunner(const std::string& filename)
 	try {
 		letsGo(filename);
 	} catch (const std::exception& e) {
-		std::cout << RED << "[ ✘\t\t\t]" << "\terror: " \
+		std::cout << RED << "[ ";
+		displayTime();
+		std::cout << " |    ✘   ]" << "\terror: " \
 		<< e.what() << CRST << std::endl;
 	}
 }
@@ -240,7 +242,7 @@ void	ScriptRunner::handleFunction(const svector& vec, const_iterator lhs, const_
 	}
 	if (!closed || it + 1 != vec.end())
 		throw std::invalid_argument("wrong syntax: bracket not closed");
-	
+
 	g_function_args.push(args);
 	g_functions[*name]->exec();
 

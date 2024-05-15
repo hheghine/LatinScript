@@ -18,6 +18,8 @@ class Functio : public LatinScript {
 
 		svector						_var_names;
 
+		static int					_in_function;
+
 		// std::stack<std::unordered_map<std::string, Object *>> _args;
 
 	public:
@@ -33,7 +35,7 @@ class Functio : public LatinScript {
 		void	letsGo(const std::string& declaration);
 
 		void	handleAssignment(const svector& vec, const_iterator lhs, const_iterator& it);
-		// void	handleOperator(const svector& vec, const_iterator lhs, const_iterator& it);
+		void	handleOperator(const svector& vec, const_iterator lhs, const_iterator& it);
 
 		Object*	createVar(const std::string& type);
 		void	handleReturn(const svector& vec);

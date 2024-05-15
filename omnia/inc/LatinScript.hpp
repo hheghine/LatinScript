@@ -98,7 +98,7 @@ inline static void	usage()
 	<< ls::CRST << std::endl;
 }
 
-inline static void	displayInput(const svector& vec)
+inline static void	displayTime()
 {
 	auto now = std::chrono::system_clock::now();
 	auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(\
@@ -106,9 +106,15 @@ inline static void	displayInput(const svector& vec)
 	std::time_t t = std::chrono::system_clock::to_time_t(now);
 	std::tm tm = *std::localtime(&t);
 
-	std::cout << BGRY << "[ " << std::put_time(&tm, "%H:%M:%S") \
-		<< "." << std::setfill('0') << std::setw(3) << ms.count() \
-		<< " | INPUT  ]\t" << GRY;
+	std::cout << std::put_time(&tm, "%H:%M:%S") \
+		<< "." << std::setfill('0') << std::setw(3) << ms.count();
+}
+
+inline static void	displayInput(const svector& vec)
+{
+	std::cout << BGRY << "[ ";
+	displayTime();
+	std::cout << " | INPUT  ]\t" << GRY;
 
 	for (auto it = vec.begin(); it != vec.end(); ++it)
 		std::cout << *it << " ";
@@ -117,14 +123,9 @@ inline static void	displayInput(const svector& vec)
 
 inline static void	displayOutput(bool flag, const std::string& message)
 {
-	auto now = std::chrono::system_clock::now();
-	auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(\
-											now.time_since_epoch()) % 1000;
-	std::time_t t = std::chrono::system_clock::to_time_t(now);
-	std::tm tm = *std::localtime(&t);
-
-	std::cout << MAIN << "[ " << std::put_time(&tm, "%H:%M:%S") \
-		<< "." << std::setfill('0') << std::setw(3) << ms.count() << " | OUTPUT ]\t";
+	std::cout << MAIN << "[ ";
+	displayTime();
+	std::cout << " | OUTPUT ]\t";
 
 	flag ? std::cout << MAIN << message : std::cout << GRY << "-";
 
@@ -133,9 +134,6 @@ inline static void	displayOutput(bool flag, const std::string& message)
 
 /*-----------LATIN-SCRIPT CLASS-----------*/
 
-// extern std::unordered_map<std::string, Object *> vars;
-
-
 class LatinScript {
 
 	public:
@@ -143,7 +141,6 @@ class LatinScript {
 		virtual ~LatinScript() {}
 
 	public:
-		// std::unordered_map<std::string, Object *> vars;
 		std::unordered_set<Object *> objects;
 	
 	protected:
@@ -161,13 +158,11 @@ class LatinScript {
 
 		bool _ignore;
 
-		bool _function_return;
-
 	protected:
 		virtual void	letsGo(const std::string& filename) = 0;
-		virtual void	mainLoop(std::ifstream& file, const std::string& line) { (void)file; (void)line; }
+		virtual void	handleOperator(const svector& vec, const_iterator lhs, const_iterator& it) = 0;
 
-		virtual void	handleOperator(const svector& vec, const_iterator lhs, const_iterator& it);
+		virtual void	mainLoop(std::ifstream& file, const std::string& line) { (void)file; (void)line; }
 		virtual void	handleAssignment(const svector& vec, const_iterator lhs, const_iterator& it);
 
 		void	createVariable(const svector& vec);
