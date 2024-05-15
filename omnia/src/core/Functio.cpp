@@ -127,20 +127,20 @@ void	Functio::main_loop()
 
 		_output = false;
 		if (_ignore && line[0] == '\t' && line[1] == '\t')
-			return ;
+			continue ;
 		_ignore = false;
 		svector vec = utils::splitLine(line);
 		if (vec.empty())
-			return ;
+			continue ;
 		if ((vec[0] == "<<" && __if) || \
 			(vec[0] == "<<" && _is_elseif && __elseif) || \
 			(vec[0] == "<<<" && (__if || __elseif)))
 			_ignore = true;
 
 		if (_ignore && ((line[0] == '\t' && line[1] == '\t') || utils::isCondition(vec[0])))
-			return ;
+			continue ;
 		if (line[0] == '#')
-			return ;
+			continue ;
 
 		displayInput(vec);
 
@@ -152,7 +152,7 @@ void	Functio::main_loop()
 			if (vec.begin() + 2 == vec.end())
 			{
 				displayOutput(false, "");
-				return ;
+				continue ;
 			}
 
 			it += 2;
@@ -170,7 +170,7 @@ void	Functio::main_loop()
 				displayOutput(true, "false");
 				_output = true;
 				_ignore = true;
-				return ;
+				continue ;
 			}
 			else
 			{
@@ -185,7 +185,7 @@ void	Functio::main_loop()
 		else if (vec[0] =="redire")
 		{
 			handleReturn(vec);
-			if (_in_function == 1)
+			// if (_in_function == 1)
 				break ;
 		}
 		else
@@ -215,28 +215,33 @@ void	Functio::main_loop()
 		if (it1 != _var_names.end() || it2 != args.end())
 			throw std::invalid_argument("wrong aruments passed to function: " + _name);
 	}
-	// 	exec();
 }
 
 void	Functio::handleReturn(const svector& vec)
 {
-	vars["_"] = createVar(_return->type);
+	if (vec.size() == 2 && vars.find(vec[1]) != vars.end())
+		_return->setValue(vars[vec[1]]);
+	else
+	{
 
-	svector vec1;
+		vars["_"] = createVar(_return->type);
 
-	vec1.push_back("_");
-	vec1.push_back("=");
+		svector vec1;
 
-	for (auto it = vec.begin() + 1; it != vec.end(); ++it)
-		vec1.push_back(*it);
+		vec1.push_back("_");
+		vec1.push_back("=");
 
-	const_iterator iter = vec1.begin() + 1;
-	handleOperator(vec1, vec1.begin(), iter);
+		for (auto it = vec.begin() + 1; it != vec.end(); ++it)
+			vec1.push_back(*it);
 
-	_return->setValue(vars["_"]->value);
-	vars["_"]->value = nullptr;
-	delete vars["_"];
-	vars.erase("_");
+		const_iterator iter = vec1.begin() + 1;
+		handleOperator(vec1, vec1.begin(), iter);
+
+		_return->setValue(vars["_"]->value);
+		vars["_"]->value = nullptr;
+		delete vars["_"];
+		vars.erase("_");
+	}
 }
 
 void	Functio::handleOperator(const svector& vec, const_iterator lhs, const_iterator& it)

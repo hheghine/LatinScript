@@ -58,9 +58,9 @@ dum < x > 35 >
 
 scribere << *still working fine*
 
-
 functio sum < numerus a, numerus b > : numerus
-	redire a + b
+	numerus n = a + b
+	redire n
 
 functio div < numerus a, numerus b > : numerus
 	numerus n = sum < 3, 10 >
@@ -80,12 +80,12 @@ numerus res
 functio rec_sum < numerus first, numerus second > : numerus
 	res = first + second
 	scribere << res
-	< res < 100 >
+	< res < 5 >
 		first = first + 1
 		second = second + 1
 		scribere << first << * * << second
 		res = rec_sum < first, second >
-	redire first + second
+	redire res
 
 numerus test = rec_sum < 1, 2 >
 scribere << test 

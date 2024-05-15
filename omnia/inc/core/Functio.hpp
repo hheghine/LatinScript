@@ -4,6 +4,7 @@
 # include "LatinScript.hpp"
 # include "ScriptRunner.hpp"
 
+
 using namespace ls;
 
 /*---------------------FUNCTIO---------------------*/
@@ -19,8 +20,6 @@ class Functio : public LatinScript {
 		svector						_var_names;
 
 		static int					_in_function;
-
-		// std::stack<std::unordered_map<std::string, Object *>> _args;
 
 	public:
 		Functio(const std::string& declaration);

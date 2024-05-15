@@ -160,12 +160,6 @@ void	ScriptRunner::parseFunction(std::ifstream& file, const std::string& declara
 
 	func->setBody(body);
 
-	// func->vars["a"]->setValue(new int(4));
-	// func->vars["b"]->setValue(new int(5));
-
-	// vars["a"]->setValue(new int(4));
-	// vars["b"]->setValue(new int(5));
-
 	if (g_functions.find(func->_name) != g_functions.end())
 	{
 		delete func;
@@ -246,9 +240,6 @@ void	ScriptRunner::handleFunction(const svector& vec, const_iterator lhs, const_
 	g_function_args.push(args);
 	g_functions[*name]->exec();
 
-
-	// std::cout << *lhs << std::endl;
-	// std::cout << *((int *)vars[*lhs]->value) << std::endl;
 	vars[*lhs]->setValue(g_functions[*name]->_return->value);
 	g_functions[*name]->_return->value = nullptr;
 }
