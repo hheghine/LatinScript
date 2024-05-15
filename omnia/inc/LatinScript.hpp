@@ -161,6 +161,8 @@ class LatinScript {
 
 		bool _ignore;
 
+		bool _function_return;
+
 	protected:
 		virtual void	letsGo(const std::string& filename) = 0;
 		virtual void	mainLoop(std::ifstream& file, const std::string& line) { (void)file; (void)line; }

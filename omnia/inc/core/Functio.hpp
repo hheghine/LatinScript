@@ -12,9 +12,13 @@ class Functio : public LatinScript {
 	public:
 		std::string					_name;
 		std::string					_return_type;
-		std::vector<std::string>	_param_types;
-		std::vector<std::string>	_body;
+		svector						_param_types;
+		svector						_body;
 		Object*						_return;
+
+		svector						_var_names;
+
+		// std::stack<std::unordered_map<std::string, Object *>> _args;
 
 	public:
 		Functio(const std::string& declaration);
@@ -23,11 +27,13 @@ class Functio : public LatinScript {
 	public:
 		void	setBody(const svector& body);
 		void	main_loop();
+		void	exec();
 
 	private:
 		void	letsGo(const std::string& declaration);
 
 		void	handleAssignment(const svector& vec, const_iterator lhs, const_iterator& it);
+		// void	handleOperator(const svector& vec, const_iterator lhs, const_iterator& it);
 
 		Object*	createVar(const std::string& type);
 		void	handleReturn(const svector& vec);

@@ -38,7 +38,6 @@ void	Functio::letsGo(const std::string& declaration)
 
 	bool closed = false;
 
-
 	auto it = decl_vec.begin() + 3;
 	for (; it != decl_vec.end(); ++it)
 	{
@@ -49,6 +48,7 @@ void	Functio::letsGo(const std::string& declaration)
 		}
 		if (!utils::isType(*it))
 			throw std::invalid_argument("wrong function syntax");
+
 		it ++;
 		if (((*it).at((*it).size() - 1) != ',' && it + 1 != decl_vec.end() && *(it + 1) != ">"))
 			throw std::invalid_argument("wrong function syntax");
@@ -56,6 +56,9 @@ void	Functio::letsGo(const std::string& declaration)
 		std::string var_name = *it;
 		if (var_name[var_name.size() - 1] == ',')
 			var_name.erase(var_name.end() - 1);
+
+		_var_names.push_back(var_name);
+
 		vars[var_name] = createVar(*(it - 1));
 		objects.insert(vars[var_name]);
 	}
@@ -91,6 +94,24 @@ void	Functio::setBody(const svector& body)
 {
 	for (auto it = body.begin(); it != body.end(); ++it)
 		_body.push_back(*it);
+}
+
+void	Functio::exec()
+{
+	svector args = g_function_args.top();
+
+	auto it1 = _var_names.begin();
+	auto it2 = args.begin();
+
+	while (it1 != _var_names.end() && it2 != args.end())
+	{
+		vars[*it1]->setValue(*it2);
+		it1 ++;
+		it2 ++;
+	}
+	if (it1 != _var_names.end() || it2 != args.end())
+		throw std::invalid_argument("wrong aruments passed to function: " + _name);
+	main_loop();
 }
 
 void	Functio::main_loop()
@@ -167,6 +188,7 @@ void	Functio::main_loop()
 		if (!_output)
 			displayOutput(false, "");
 	}
+	// g_function_args.pop();
 }
 
 void	Functio::handleReturn(const svector& vec)
@@ -200,9 +222,9 @@ void	Functio::handleAssignment(const svector& vec, const_iterator lhs, const_ite
 
 	if (g_functions.find(*it) != g_functions.end())
 	{
-		if (g_functions[*it]->_return_type != vars[toChange]->type)
-			throw std::invalid_argument("blabla");
-		g_functions[*it]->main_loop();
+		// if (g_functions[*it]->_return_type != vars[toChange]->type)
+		// 	throw std::invalid_argument("blabla");
+		// g_functions[*it]->main_loop();
 	}
 	/* another (valid?) object => set the pointer to point that object */
 	else if (vars.find(*it) != vars.end() && \
@@ -227,3 +249,59 @@ void	Functio::handleAssignment(const svector& vec, const_iterator lhs, const_ite
 	else
 		vars[toChange]->setValue(*it);
 }
+
+// void	Functio::handleOperator(const svector& vec, const_iterator lhs, const_iterator& it)
+// {
+// 	if (vars.find(*(it - 1)) == vars.end())
+// 		throw std::invalid_argument("invalid assignment: " + *(it - 1));
+
+// 	_chainedOperations = false;
+// 	_isAssignment = false;
+// 	const_iterator final_lhs;
+
+// 	for (auto iter = it; iter != vec.end(); ++iter)
+// 	{
+// 		auto op = operator_map.find(*iter);
+// 		if (op == operator_map.end())
+// 			throw std::invalid_argument("unknown operator: " + *iter);
+
+// 		switch(op->second)
+// 		{
+// 			case operators::ASSIGNMENT :
+// 				_isAssignment = true;
+// 				/* if there's a chain of operations, creating a temporary object to
+// 				store the non-final value and then assigning the final value to actual lhs */
+// 				if (iter + 1 != vec.end() && iter + 2 != vec.end()
+// 				&& vars.find(*(iter - 1)) != vars.end())
+// 				{
+// 					Object* tmp = vars[*(iter - 1)]->clone();
+// 					objects.insert(tmp);
+// 					vars["temp"] = tmp;
+// 					final_lhs = lhs;
+// 					_chainedOperations = true;
+// 				}
+// 				handleAssignment(vec, lhs, ++iter);
+// 				break ;
+// 			case operators::PLUS :
+// 				handleAddition(vec, lhs, ++iter);
+// 				break ;
+// 			case operators::MINUS :
+// 				handleSubstraction(vec, lhs, ++iter);
+// 				break ;
+// 			case operators::MULTIPLY :
+// 				handleMultiplication(vec, lhs, ++iter);
+// 				break ;
+// 			case operators::DIVIDE :
+// 				handleDivision(vec, lhs, ++iter);
+// 				break ;
+// 		}
+// 	}
+// 	/* assigning the final value to actual lhs */
+// 	if (_chainedOperations)
+// 	{
+// 		vars[*final_lhs]->setValue(vars["temp"]);
+// 		objects.erase(vars["temp"]);
+// 		delete vars["temp"];
+// 		_chainedOperations = false;
+// 	}
+// }

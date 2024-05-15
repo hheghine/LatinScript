@@ -6,7 +6,7 @@ using namespace ls;
 *	GLOBAL VARIABLE
 *********************/
 std::unordered_map<std::string, Functio *> g_functions;
-std::stack<std::unordered_map<std::string, svector>> _function_args;
+std::stack<svector> g_function_args;
 
 
 ScriptRunner::ScriptRunner(const std::string& filename)
@@ -161,8 +161,8 @@ void	ScriptRunner::parseFunction(std::ifstream& file, const std::string& declara
 	// func->vars["a"]->setValue(new int(4));
 	// func->vars["b"]->setValue(new int(5));
 
-	vars["a"]->setValue(new int(4));
-	vars["b"]->setValue(new int(5));
+	// vars["a"]->setValue(new int(4));
+	// vars["b"]->setValue(new int(5));
 
 	if (g_functions.find(func->_name) != g_functions.end())
 	{
@@ -182,17 +182,16 @@ void	ScriptRunner::handleAssignment(const svector& vec, const_iterator lhs, cons
 	if (g_functions.find(*it) != g_functions.end())
 	{
 		if (g_functions[*it]->_return_type != vars[toChange]->type)
-			throw std::invalid_argument("blabla");
-		g_functions[*it]->main_loop();
+			throw std::invalid_argument("type conflict: " + g_functions[*it]->_return_type \
+			+ " vs " +  vars[toChange]->type);
+		handleFunction(vec, lhs, it);
 	}
 	/* another (valid?) object => set the pointer to point that object */
 	else if (vars.find(*it) != vars.end() && \
 		vars[toChange]->type == vars[*it]->type)
 	{
 		if (_chainedOperations)
-		{
 			vars[toChange]->setValue(vars[*it]);
-		}
 		else
 		{
 			if (vars[toChange]->links == 1)
@@ -207,4 +206,101 @@ void	ScriptRunner::handleAssignment(const svector& vec, const_iterator lhs, cons
 	/* literal value */
 	else
 		vars[toChange]->setValue(*it);
+}
+
+void	ScriptRunner::handleFunction(const svector& vec, const_iterator lhs, const_iterator& it)
+{
+	auto name = it;
+
+	it ++;
+	if (it == vec.end() || *it != "<")
+		throw std::invalid_argument("wrong syntax: opening bracket '<' not found");
+
+	bool closed = false;
+
+	/* handle void function later*/
+
+	svector args;
+
+	it ++;
+
+	for (; it != vec.end(); ++it)
+	{
+		if (*it == ">")
+		{
+			closed = true;
+			break ;
+		}
+		std::string temp = *it;
+		if (temp.find(',') != std::string::npos)
+			temp.erase(temp.end() - 1);
+		else if (*(it + 1) != ">")
+			throw std::invalid_argument("wrong syntax: use ',' to separate arguments");
+		args.push_back(temp);
+	}
+	if (!closed || it + 1 != vec.end())
+		throw std::invalid_argument("wrong syntax: bracket not closed");
+	
+	g_function_args.push(args);
+	g_functions[*name]->exec();
+
+	vars[*lhs]->setValue(g_functions[*name]->_return->value);
+	g_functions[*name]->_return->value = nullptr;
+}
+
+void	ScriptRunner::handleOperator(const svector& vec, const_iterator lhs, const_iterator& it)
+{
+	if (vars.find(*(it - 1)) == vars.end())
+		throw std::invalid_argument("invalid assignment: " + *(it - 1));
+
+	_chainedOperations = false;
+	_isAssignment = false;
+	const_iterator final_lhs;
+
+	for (auto iter = it; iter != vec.end(); ++iter)
+	{
+		auto op = operator_map.find(*iter);
+		if (op == operator_map.end())
+			throw std::invalid_argument("unknown operator: " + *iter);
+
+		switch(op->second)
+		{
+			case operators::ASSIGNMENT :
+				_isAssignment = true;
+				/* if there's a chain of operations, creating a temporary object to
+				store the non-final value and then assigning the final value to actual lhs */
+				if (iter + 1 != vec.end() && iter + 2 != vec.end()
+				&& vars.find(*(iter - 1)) != vars.end() \
+				&& g_functions.find(*(iter + 1)) == g_functions.end())
+				{
+					Object* tmp = vars[*(iter - 1)]->clone();
+					objects.insert(tmp);
+					vars["tmp"] = tmp;
+					final_lhs = lhs;
+					_chainedOperations = true;
+				}
+				handleAssignment(vec, lhs, ++iter);
+				break ;
+			case operators::PLUS :
+				handleAddition(vec, lhs, ++iter);
+				break ;
+			case operators::MINUS :
+				handleSubstraction(vec, lhs, ++iter);
+				break ;
+			case operators::MULTIPLY :
+				handleMultiplication(vec, lhs, ++iter);
+				break ;
+			case operators::DIVIDE :
+				handleDivision(vec, lhs, ++iter);
+				break ;
+		}
+	}
+	/* assigning the final value to actual lhs */
+	if (_chainedOperations)
+	{
+		vars[*final_lhs]->setValue(vars["tmp"]);
+		objects.erase(vars["tmp"]);
+		delete vars["tmp"];
+		_chainedOperations = false;
+	}
 }

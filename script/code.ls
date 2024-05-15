@@ -64,13 +64,11 @@
 numerus x = 2
 
 functio sum < numerus a, numerus b > : numerus
-	scribere << *AAAA*
-	x = x - 1
-	< x > 0 >
-		a = sum
 	redire a + b
 
 scribere << *BBBB*
 
-numerus k = sum
+numerus k = sum < 4, 5 >
+
+scribere << *k = * << k
 

@@ -17,6 +17,7 @@ LatinScript::LatinScript()
 	, __elseif(false)
 	, __else(false)
 	, _ignore(false)
+	, _function_return(false)
 {}
 
 void	LatinScript::handleOutput(const svector& vec, const std::string& line)
