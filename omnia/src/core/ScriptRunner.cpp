@@ -246,6 +246,9 @@ void	ScriptRunner::handleFunction(const svector& vec, const_iterator lhs, const_
 	g_function_args.push(args);
 	g_functions[*name]->exec();
 
+
+	// std::cout << *lhs << std::endl;
+	// std::cout << *((int *)vars[*lhs]->value) << std::endl;
 	vars[*lhs]->setValue(g_functions[*name]->_return->value);
 	g_functions[*name]->_return->value = nullptr;
 }

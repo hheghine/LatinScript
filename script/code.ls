@@ -75,3 +75,18 @@ scribere << *k = * << k
 numerus m = div < 10, 5 >
 scribere << *m = * << m
 
+numerus res
+
+functio rec_sum < numerus first, numerus second > : numerus
+	res = first + second
+	scribere << res
+	< res < 100 >
+		first = first + 1
+		second = second + 1
+		scribere << first << * * << second
+		res = rec_sum < first, second >
+	redire first + second
+
+numerus test = rec_sum < 1, 2 >
+scribere << test 
+
