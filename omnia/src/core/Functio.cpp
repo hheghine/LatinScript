@@ -1,6 +1,6 @@
 #include "Functio.hpp"
 
-int Functio::_in_function = 0;
+// int Functio::_in_function = 0;
 
 Functio::Functio(const std::string& declaration)
 	: LatinScript()
@@ -114,7 +114,7 @@ void	Functio::exec()
 	if (it1 != _var_names.end() || it2 != args.end())
 		throw std::invalid_argument("wrong aruments passed to function: " + _name);
 
-	_in_function ++;
+	// _in_function ++;
 
 	main_loop();
 }
@@ -195,26 +195,27 @@ void	Functio::main_loop()
 			displayOutput(false, "");
 	}
 
-	svector args = g_function_args.top();
+	/* this part was made for different functions having same arg names np */
+	// svector args = g_function_args.top();
 
 	g_function_args.pop();
-	_in_function --;
-	if (_in_function)
-	{
-		svector args = g_function_args.top();
+	// _in_function --;
+	// if (_in_function)
+	// {
+	// 	svector args = g_function_args.top();
 
-		auto it1 = _var_names.begin();
-		auto it2 = args.begin();
+	// 	auto it1 = _var_names.begin();
+	// 	auto it2 = args.begin();
 
-		while (it1 != _var_names.end() && it2 != args.end())
-		{
-			vars[*it1]->setValue(*it2);
-			it1 ++;
-			it2 ++;
-		}
-		if (it1 != _var_names.end() || it2 != args.end())
-			throw std::invalid_argument("wrong aruments passed to function: " + _name);
-	}
+	// 	while (it1 != _var_names.end() && it2 != args.end())
+	// 	{
+	// 		vars[*it1]->setValue(*it2);
+	// 		it1 ++;
+	// 		it2 ++;
+	// 	}
+	// 	if (it1 != _var_names.end() || it2 != args.end())
+	// 		throw std::invalid_argument("wrong aruments passed to function: " + _name);
+	// }
 }
 
 void	Functio::handleReturn(const svector& vec)

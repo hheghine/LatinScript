@@ -19,7 +19,7 @@ class Functio : public LatinScript {
 
 		svector						_var_names;
 
-		static int					_in_function;
+		// static int					_in_function;
 
 	public:
 		Functio(const std::string& declaration);

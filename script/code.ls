@@ -62,10 +62,10 @@ functio sum < numerus a, numerus b > : numerus
 	numerus n = a + b
 	redire n
 
-functio div < numerus a, numerus b > : numerus
+functio div < numerus c, numerus d > : numerus
 	numerus n = sum < 3, 10 >
 	scribere << *n = * << n
-	redire a / b
+	redire c / d
 
 scribere << *Let's goooooooooo*
 
@@ -80,7 +80,7 @@ numerus res
 functio rec_sum < numerus first, numerus second > : numerus
 	res = first + second
 	scribere << res
-	< res < 5 >
+	< res < 100 >
 		first = first + 1
 		second = second + 1
 		scribere << first << * * << second
