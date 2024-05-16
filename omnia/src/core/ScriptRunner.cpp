@@ -130,31 +130,6 @@ void	ScriptRunner::mainLoop(std::ifstream& file, const std::string& line)
 		displayOutput(false, "");
 }
 
-void	ScriptRunner::createVariable(const std::vector<std::string>& vec)
-{
-	if (vec.size() < 2)
-		throw std::invalid_argument("syntax error");
-	if (!utils::varNameCheck(vec[1]))
-		throw std::invalid_argument("invalid variable name: " + vec[1]);
-	if (vars.find(vec[1]) != vars.end())
-			throw std::invalid_argument("redefinition: " + vec[1]);
-	if (vec[0] == "numerus")
-	{
-		vars[vec[1]] = new Numerus();
-		objects.insert(vars[vec[1]]);
-	}
-	else if (vec[0] == "filum")
-	{
-		vars[vec[1]] = new Filum();
-		objects.insert(vars[vec[1]]);
-	}
-	else if (vec[0] == "duplus")
-	{
-		vars[vec[1]] = new Duplus();
-		objects.insert(vars[vec[1]]);
-	}
-}
-
 void	ScriptRunner::parseFunction(std::ifstream& file, const std::string& declaration)
 {
 	Functio* func = new Functio(declaration);

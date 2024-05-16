@@ -28,7 +28,6 @@ class ScriptRunner : public LatinScript {
 		void	handleOperator(const svector& vec, const_iterator lhs, const_iterator& it);
 		void	handleAssignment(const svector& vec, const_iterator lhs, const_iterator& it);
 
-		void	createVariable(const std::vector<std::string>& vec);
 		void	parseFunction(std::ifstream& file, const std::string& declaration);
 
 };
