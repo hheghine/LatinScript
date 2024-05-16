@@ -37,7 +37,7 @@ INCLUDES	=	-Iomnia/inc \
 					-Iomnia/inc/utils
 
 CXX			= @c++
-CXXFLAGS 	= -g3 -Wall -Wextra -Werror $(INCLUDES) -fsanitize=address 
+CXXFLAGS 	= -g3 -Wall -Wextra -Werror $(INCLUDES) #-fsanitize=address 
 
 
 OBJS_DIR	= .objects

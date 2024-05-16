@@ -105,37 +105,6 @@ void	LatinScript::handleStatement(const svector& vec, const_iterator it)
 		handleOperator(vec, it - 1, it);
 }
 
-/*
-void	LatinScript::handleAssignment(const svector& vec, const_iterator lhs, const_iterator& it)
-{
-	if (it == vec.end())
-		throw std::invalid_argument("invalid assignment operation");
-
-	std::string toChange = _chainedOperations ? "tmp" : *lhs;
-
-	if (vars.find(*it) != vars.end() && \
-		vars[toChange]->type == vars[*it]->type)
-	{
-		if (_chainedOperations)
-		{
-			vars[toChange]->setValue(vars[*it]);
-		}
-		else
-		{
-			if (vars[toChange]->links == 1)
-			{
-				objects.erase(vars[toChange]);
-				delete vars[toChange];
-			}
-			vars[toChange] = vars[*it];
-			vars[*it]->links ++;
-		}
-	}
-	else
-		vars[toChange]->setValue(*it);
-}
-*/
-
 void	LatinScript::handleAddition(const svector& vec, const_iterator lhs, const_iterator& it)
 {
 	if (it == vec.end())
