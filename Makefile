@@ -29,14 +29,15 @@ UTILS_DIR	= $(SRCS_DIR)utils/
 
 SRC_FILES	= $(addprefix $(SRCS_DIR), main.cpp LatinScript.cpp) \
 				$(addprefix $(UTILS_DIR), Utils.cpp) \
-				$(addprefix $(CORE_DIR), Object.cpp Numerus.cpp Functio.cpp ScriptRunner.cpp)
+				$(addprefix $(CORE_DIR), Object.cpp Numerus.cpp Functio.cpp \
+										ScriptRunner.cpp Filum.cpp)
 
 INCLUDES	=	-Iomnia/inc \
 					-Iomnia/inc/core \
 					-Iomnia/inc/utils
 
 CXX			= @c++
-CXXFLAGS 	= -g3 -Wall -Wextra -Werror $(INCLUDES) #-fsanitize=address 
+CXXFLAGS 	= -g3 -Wall -Wextra -Werror $(INCLUDES) -fsanitize=address 
 
 
 OBJS_DIR	= .objects

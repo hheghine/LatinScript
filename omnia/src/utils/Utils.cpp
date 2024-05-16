@@ -160,3 +160,50 @@ std::string utils::extractString(std::string::const_iterator start, \
 	}
 	throw std::invalid_argument("wrong syntax: close the bracket: *");
 }
+
+std::string utils::extractString(std::string& line, std::string::const_iterator start, \
+								std::string::const_iterator end, char key)
+{
+	std::string extracted;
+	bool opened = false;
+
+	for (auto it = start; it != end; ++it)
+	{
+		if (*it == key && !opened)
+		{
+			opened = true;
+			continue;
+		}
+		if (*it == key)
+		{
+			line = std::string(it + 1, end);
+			return extracted;
+		}
+		if (opened)
+		{
+			if (*it == '\\')
+			{
+				++it;
+				if (it == end)
+					throw std::invalid_argument("wrong syntax: close the bracket: *");
+				switch (*it)
+				{
+					case 'n':
+						extracted += '\n';
+						break;
+					case 't':
+						extracted += '\t';
+						break;
+					default:
+						extracted += *it;
+						break;
+				}
+			}
+			else
+			{
+				extracted += *it;
+			}
+		}
+	}
+	throw std::invalid_argument("wrong syntax: close the bracket: *");
+}

@@ -27,8 +27,7 @@ const svector reserved = {
 	{"scribere"},	/* cout		*/
 	{"arredo"},		/* array	*/
 	{"tmp"},
-	{"__lhs"},
-	{"__rhs"}
+	{"_"}
 };
 
 /*----------------FUNCTIONS----------------*/
@@ -53,6 +52,8 @@ std::string::const_iterator	search(std::string::const_iterator start, \
 									const std::string& key);
 
 std::string	extractString(std::string::const_iterator start, \
+							std::string::const_iterator end, char key);
+std::string	extractString(std::string& line, std::string::const_iterator start, \
 							std::string::const_iterator end, char key);
 std::string	extractString(std::string::const_iterator start, \
 							std::string::const_iterator end);

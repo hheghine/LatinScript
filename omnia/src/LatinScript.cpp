@@ -85,11 +85,16 @@ void	LatinScript::createVariable(const std::vector<std::string>& vec)
 		throw std::invalid_argument("syntax error");
 	if (!utils::varNameCheck(vec[1]))
 		throw std::invalid_argument("invalid variable name: " + vec[1]);
-	// if (vars.find(vec[1]) != vars.end())
-	// 		throw std::invalid_argument("redefinition: " + vec[1]);
+	if (vars.find(vec[1]) != vars.end())
+			throw std::invalid_argument("redefinition: " + vec[1]);
 	if (vec[0] == "numerus")
 	{
 		vars[vec[1]] = new Numerus();
+		objects.insert(vars[vec[1]]);
+	}
+	else if (vec[0] == "filum")
+	{
+		vars[vec[1]] = new Filum();
 		objects.insert(vars[vec[1]]);
 	}
 }
@@ -100,6 +105,7 @@ void	LatinScript::handleStatement(const svector& vec, const_iterator it)
 		handleOperator(vec, it - 1, it);
 }
 
+/*
 void	LatinScript::handleAssignment(const svector& vec, const_iterator lhs, const_iterator& it)
 {
 	if (it == vec.end())
@@ -107,7 +113,6 @@ void	LatinScript::handleAssignment(const svector& vec, const_iterator lhs, const
 
 	std::string toChange = _chainedOperations ? "tmp" : *lhs;
 
-	/* another (valid?) object => set the pointer to point that object */
 	if (vars.find(*it) != vars.end() && \
 		vars[toChange]->type == vars[*it]->type)
 	{
@@ -126,10 +131,10 @@ void	LatinScript::handleAssignment(const svector& vec, const_iterator lhs, const
 			vars[*it]->links ++;
 		}
 	}
-	/* literal value */
 	else
 		vars[toChange]->setValue(*it);
 }
+*/
 
 void	LatinScript::handleAddition(const svector& vec, const_iterator lhs, const_iterator& it)
 {
@@ -143,8 +148,34 @@ void	LatinScript::handleAddition(const svector& vec, const_iterator lhs, const_i
 		if (vars.find(*it) != vars.end())
 			vars[toChange]->addition(vars[*it]);
 		else
-			vars[toChange]->addition(*it);
+		{
+			if (vars[toChange]->type == "filum")
+				vars[toChange]->addition(extractString(vec, it));
+			else
+				vars[toChange]->addition(*it);
+		}
 	}
+}
+
+std::string	LatinScript::extractString(const svector& vec, const_iterator& it)
+{
+	bool closed = false;
+
+	for(; it != vec.end(); ++it)
+	{
+		if (*((*it).end() - 1) == '*')
+		{
+			closed = true;
+			break ;
+		}
+	}
+
+	if (!closed)
+		throw std::invalid_argument("wrong syntax: bracket '*' not closed");
+
+	std::string str(_line.begin(), _line.end());
+
+	return utils::extractString(_line, str.begin(), str.end(), '*');
 }
 
 void	LatinScript::handleSubstraction(const svector& vec, const_iterator lhs, const_iterator& it)

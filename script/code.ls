@@ -58,12 +58,14 @@ dum < x > 35 >
 
 scribere << *still working fine*
 
+numerus n
+
 functio sum < numerus a, numerus b > : numerus
-	numerus n = a + b
+	n = a + b
 	redire n
 
 functio div < numerus c, numerus d > : numerus
-	numerus n = sum < 3, 10 >
+	n = sum < 3, 10 >
 	scribere << *n = * << n
 	redire c / d
 
@@ -90,3 +92,15 @@ functio rec_sum < numerus first, numerus second > : numerus
 numerus test = rec_sum < 1, 2 >
 scribere << test 
 
+filum l = *hello\t*
+
+scribere << l
+
+l = l + *world * + *!*
+
+scribere << l
+
+filum ll = *hello*
+
+< l > ll >
+	scribere << *YES*

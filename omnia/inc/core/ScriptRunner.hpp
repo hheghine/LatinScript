@@ -30,6 +30,7 @@ class ScriptRunner : public LatinScript {
 
 		void	createVariable(const std::vector<std::string>& vec);
 		void	parseFunction(std::ifstream& file, const std::string& declaration);
+
 };
 
 #endif

@@ -15,7 +15,7 @@
 # include <chrono>
 
 # include "Numerus.hpp"
-// # include "Functio.hpp"
+# include "Filum.hpp"
 # include "Utils.hpp"
 
 
@@ -158,12 +158,14 @@ class LatinScript {
 
 		bool _ignore;
 
+		std::string _line;
+
 	protected:
 		virtual void	letsGo(const std::string& filename) = 0;
 		virtual void	handleOperator(const svector& vec, const_iterator lhs, const_iterator& it) = 0;
 
 		virtual void	mainLoop(std::ifstream& file, const std::string& line) { (void)file; (void)line; }
-		virtual void	handleAssignment(const svector& vec, const_iterator lhs, const_iterator& it);
+		virtual void	handleAssignment(const svector& vec, const_iterator lhs, const_iterator& it) = 0;
 
 		void	createVariable(const svector& vec);
 		void	handleStatement(const svector& vec, const_iterator it);
@@ -183,6 +185,8 @@ class LatinScript {
 		bool	conditionBlockTrue(const std::string& block);
 
 		void	handleLoop(std::ifstream& file, const std::string& condition);
+
+		std::string	extractString(const svector& vec, const_iterator& it);
 };
 
 

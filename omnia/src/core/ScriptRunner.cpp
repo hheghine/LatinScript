@@ -49,6 +49,7 @@ void	ScriptRunner::letsGo(const std::string& filename)
 
 	while (std::getline(file, line))
 	{
+		_line = line;
 		std::stringstream ss(line);
 		std::string first_word;
 
@@ -142,6 +143,11 @@ void	ScriptRunner::createVariable(const std::vector<std::string>& vec)
 		vars[vec[1]] = new Numerus();
 		objects.insert(vars[vec[1]]);
 	}
+	else if (vec[0] == "filum")
+	{
+		vars[vec[1]] = new Filum();
+		objects.insert(vars[vec[1]]);
+	}
 }
 
 void	ScriptRunner::parseFunction(std::ifstream& file, const std::string& declaration)
@@ -201,7 +207,12 @@ void	ScriptRunner::handleAssignment(const svector& vec, const_iterator lhs, cons
 	}
 	/* literal value */
 	else
-		vars[toChange]->setValue(*it);
+	{
+		if (vars[toChange]->type == "filum")
+			vars[toChange]->setValue(extractString(vec, it));
+		else
+			vars[toChange]->setValue(*it);
+	}
 }
 
 void	ScriptRunner::handleFunction(const svector& vec, const_iterator lhs, const_iterator& it)

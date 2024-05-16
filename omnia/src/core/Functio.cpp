@@ -89,6 +89,8 @@ Object*	Functio::createVar(const std::string& type)
 {
 	if (type == "numerus")
 		return new Numerus();
+	if (type == "filum")
+		return new Filum();
 	throw std::invalid_argument("unknown return type: " + type);
 }
 
@@ -315,7 +317,6 @@ void	Functio::handleAssignment(const svector& vec, const_iterator lhs, const_ite
 			throw std::invalid_argument("type conflict: " + g_functions[*it]->_return_type \
 			+ " vs " +  vars[toChange]->type);
 		ScriptRunner::handleFunction(vec, lhs, it);
-
 	}
 	/* another (valid?) object => set the pointer to point that object */
 	else if (vars.find(*it) != vars.end() && \
@@ -336,5 +337,10 @@ void	Functio::handleAssignment(const svector& vec, const_iterator lhs, const_ite
 	}
 	/* literal value */
 	else
-		vars[toChange]->setValue(*it);
+	{
+		if (vars[toChange]->type == "filum")
+			vars[toChange]->setValue(extractString(vec, it));
+		else
+			vars[toChange]->setValue(*it);
+	}
 }
