@@ -3,9 +3,10 @@
 </div>
 
 <p align="center">
-  <img src="https://github.com/hheghine/LatinScript/assets/119530584/98d3262e-e5df-43d1-ab7a-545de6ef57ac" />
+  <img src="https://github.com/hheghine/LatinScript/assets/119530584/0adb13ad-78fe-47a4-8461-816ca6392e9c" />
   <i><br>Interpreter written in C++ that can process and execute Latin-based scripting language code</i><br><br>
 </p>
+
 
 ```
 //
