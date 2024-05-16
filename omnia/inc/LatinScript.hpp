@@ -16,6 +16,7 @@
 
 # include "Numerus.hpp"
 # include "Filum.hpp"
+# include "Duplus.hpp"
 # include "Utils.hpp"
 
 

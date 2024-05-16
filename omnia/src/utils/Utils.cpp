@@ -23,6 +23,16 @@ int	utils::toInt(const std::string& str)
 	return val;
 }
 
+double utils::toDouble(const std::string& str)
+{
+	double val;
+	std::istringstream ss(str);
+	ss >> std::noskipws >> val;
+	if (!ss.eof() && ss.fail())
+		throw std::invalid_argument("invaliks argument: " + str);
+	return val;
+}
+
 bool	utils::varNameCheck(const std::string& name)
 {
 	for (auto it = utils::reserved.begin(); it != utils::reserved.end(); ++it)

@@ -97,6 +97,11 @@ void	LatinScript::createVariable(const std::vector<std::string>& vec)
 		vars[vec[1]] = new Filum();
 		objects.insert(vars[vec[1]]);
 	}
+	else if (vec[0] == "duplus")
+	{
+		vars[vec[1]] = new Duplus();
+		objects.insert(vars[vec[1]]);
+	}
 }
 
 void	LatinScript::handleStatement(const svector& vec, const_iterator it)

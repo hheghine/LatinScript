@@ -148,6 +148,11 @@ void	ScriptRunner::createVariable(const std::vector<std::string>& vec)
 		vars[vec[1]] = new Filum();
 		objects.insert(vars[vec[1]]);
 	}
+	else if (vec[0] == "duplus")
+	{
+		vars[vec[1]] = new Duplus();
+		objects.insert(vars[vec[1]]);
+	}
 }
 
 void	ScriptRunner::parseFunction(std::ifstream& file, const std::string& declaration)
@@ -188,9 +193,10 @@ void	ScriptRunner::handleAssignment(const svector& vec, const_iterator lhs, cons
 			+ " vs " +  vars[toChange]->type);
 		handleFunction(vec, lhs, it);
 	}
-	/* another (valid?) object => set the pointer to point that object */
+	/* another (valid?) object => set the pointer to point that object
 	else if (vars.find(*it) != vars.end() && \
-		vars[toChange]->type == vars[*it]->type)
+	vars[toChange]->type == vars[*it]->type) */
+	else if (vars.find(*it) != vars.end())
 	{
 		if (_chainedOperations)
 			vars[toChange]->setValue(vars[*it]);

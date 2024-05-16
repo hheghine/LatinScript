@@ -34,6 +34,7 @@ const svector reserved = {
 
 svector		splitLine(const std::string& line);
 int			toInt(const std::string& str);
+double		toDouble(const std::string& str);
 
 
 bool		varNameCheck(const std::string& name);

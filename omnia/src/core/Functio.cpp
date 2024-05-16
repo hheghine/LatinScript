@@ -91,6 +91,8 @@ Object*	Functio::createVar(const std::string& type)
 		return new Numerus();
 	if (type == "filum")
 		return new Filum();
+	if (type == "duplus")
+		return new Duplus();
 	throw std::invalid_argument("unknown return type: " + type);
 }
 

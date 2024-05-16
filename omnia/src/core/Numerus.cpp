@@ -17,9 +17,18 @@ void	Numerus::setValue(const Object* rhs)
 {
 	if (rhs->value)
 	{
-		if (this->value)
-			delete (int *)this->value;
-		this->value = new int(*((int *)rhs->value));
+		if (rhs->type == this->type)
+		{
+			if (this->value)
+				delete (int *)this->value;
+			this->value = new int(*((int *)rhs->value));
+		}
+		else if (rhs->type == "duplus")
+		{
+			if (this->value)
+				delete (int *)this->value;
+			this->value = new int(*((double *)rhs->value));
+		}
 	}
 }
 
@@ -48,6 +57,8 @@ void	Numerus::addition(const Object* rhs)
 {
 	if (rhs->type == this->type)
 		*(int *)value += *((int *)rhs->value);
+	else if (rhs->type == "duplus")
+		*(int *)value += *((double *)rhs->value);
 	else
 		throw std::invalid_argument("invalid argument type: " + rhs->type);
 }
@@ -64,6 +75,8 @@ void	Numerus::substraction(const Object* rhs)
 {
 	if (rhs->type == this->type)
 		*(int *)value -= *((int *)rhs->value);
+	else if (rhs->type == "duplus")
+		*(int *)value -= *((double *)rhs->value);
 	else
 		throw std::invalid_argument("invalid argument type: " + rhs->type);
 }
@@ -80,6 +93,8 @@ void	Numerus::multiplication(const Object* rhs)
 {
 	if (rhs->type == this->type)
 		*(int *)value *= *((int *)rhs->value);
+	else if (rhs->type == "duplus")
+		*(int *)value *= *((double *)rhs->value);
 	else
 		throw std::invalid_argument("invalid argument type: " + rhs->type);
 }
@@ -96,6 +111,8 @@ void	Numerus::division(const Object* rhs)
 {
 	if (rhs->type == this->type)
 		*(int *)value /= *((int *)rhs->value);
+	else if (rhs->type == "duplus")
+		*(int *)value /= *((double *)rhs->value);
 	else
 		throw std::invalid_argument("invalid argument type: " + rhs->type);
 }
@@ -111,6 +128,8 @@ bool	Numerus::isEqual(const Object* rhs)
 {
 	if (this->type == rhs->type)
 		return *((int *)value) == *((int *)rhs->value);
+	else if (rhs->type == "duplus")
+		return *((int *)value) == *((double *)rhs->value);
 	throw std::invalid_argument("invalid consition: " + this->type + " == " + rhs->type);
 }
 
@@ -125,6 +144,8 @@ bool	Numerus::isGreater(const Object* rhs)
 {
 	if (this->type == rhs->type)
 		return *((int *)value) > *((int *)rhs->value);
+	else if (rhs->type == "duplus")
+		return *((int *)value) > *((double *)rhs->value);
 	throw std::invalid_argument("invalid consition: " + this->type + " == " + rhs->type);
 }
 
@@ -139,6 +160,8 @@ bool	Numerus::isLess(const Object* rhs)
 {
 	if (this->type == rhs->type)
 		return *((int *)value) < *((int *)rhs->value);
+	else if (rhs->type == "duplus")
+		return *((int *)value) < *((double *)rhs->value);
 	throw std::invalid_argument("invalid consition: " + this->type + " == " + rhs->type);
 }
 
