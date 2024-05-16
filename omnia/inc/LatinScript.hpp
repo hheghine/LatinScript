@@ -34,7 +34,7 @@ const char* const BGRN = "\033[1;32m";
 const char* const BCYN = "\033[1;36m";
 const char* const BGRY = "\033[1;90m";
 
-const char* const MAIN = "\033[38;2;63;0;191m";
+const char* const MAIN = "\033[38;2;56;0;198m";
 
 const char* const CRST = "\033[0m";
 
