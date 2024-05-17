@@ -5,8 +5,9 @@ using namespace ls;
 /********************
 *	GLOBAL VARIABLE
 *********************/
-std::unordered_map<std::string, Functio *> g_functions;
-std::stack<svector> g_function_args;
+std::unordered_map<std::string, Functio *>	g_functions;
+std::stack<svector>							g_function_args;
+std::unordered_map<std::string, Ordinata *>	g_arrays;
 
 
 ScriptRunner::ScriptRunner(const std::string& filename)
@@ -24,6 +25,12 @@ ScriptRunner::ScriptRunner(const std::string& filename)
 
 ScriptRunner::~ScriptRunner()
 {
+	// for (auto it = tmp_arr.begin(); it != tmp_arr.end(); ++it)
+	// {
+		// vars[*it]->value = nullptr;
+		// objects.erase(vars[*it]);
+		// delete vars[*it];
+	// }
 	for (auto it = objects.begin(); it != objects.end(); ++it)
 		delete *it;
 	objects.clear();
@@ -31,6 +38,10 @@ ScriptRunner::~ScriptRunner()
 	for (auto it = g_functions.begin(); it != g_functions.end(); ++it)
 		delete it->second;
 	g_functions.clear();
+
+	for (auto it = g_arrays.begin(); it != g_arrays.end(); ++it)
+		delete it->second;
+	g_arrays.clear();
 }
 
 void	ScriptRunner::letsGo(const std::string& filename)
@@ -84,8 +95,19 @@ void	ScriptRunner::mainLoop(std::ifstream& file, const std::string& line)
 	displayInput(vec);
 
 	auto it = vec.begin();
+
+	if (g_arrays.find(vec[0]) != g_arrays.end())
+		handleArray(vec, it);
+
 	if(utils::isType(vec[0]))
 	{
+		if (vec[0] == "ordinata")
+		{
+			Ordinata* arr = new Ordinata(line);
+			g_arrays[arr->_name] = arr;
+			return ;
+		}
+
 		createVariable(vec);
 
 		if (vec.begin() + 2 == vec.end())
@@ -128,6 +150,81 @@ void	ScriptRunner::mainLoop(std::ifstream& file, const std::string& line)
 	handleStatement(vec, it);
 	if (!_output)
 		displayOutput(false, "");
+
+	for (auto it = tmp_arr.begin(); it != tmp_arr.end(); ++it)
+	{
+		vars[*it] = nullptr;
+		delete vars[*it];
+	}
+}
+
+Object*	ScriptRunner::createVar(const std::string& type)
+{
+	if (type == "numerus")
+		return new Numerus();
+	if (type == "filum")
+		return new Filum();
+	if (type == "duplus")
+		return new Duplus();
+	return nullptr;
+}
+
+void	ScriptRunner::handleArray(svector& vec, iterator& it)
+{
+	std::string name;
+	int			idx;
+
+	if (vec.size() < 4 || vec.at(1) != "<" || vec.at(3) != ">")
+		throw std::invalid_argument("wrong statement");
+
+	if (vars.find(vec.at(2)) != vars.end() && vars[vec.at(2)]->type == "numerus")
+		idx = *((int *)vars[vec.at(2)]->value);
+	else
+		idx = utils::toInt(vec.at(2));
+
+	name = *it + "+" + std::to_string(idx);
+
+	vars[name] = g_arrays[*it]->getValue(idx);
+	tmp_arr.push_back(name);
+
+	*it = name;
+
+	vec.erase(it + 1);
+	vec.erase(it + 1);
+	vec.erase(it + 1);
+}
+
+void	ScriptRunner::handleOutput(const svector& vec, const std::string& line)
+{
+	if (vec.begin() + 1 == vec.end() || *(vec.begin() + 1) != "<<")
+		throw std::invalid_argument("invalid input or nothing to output: " + *(line.begin() + 1));
+
+	std::string output;
+	std::string::const_iterator it1 = utils::search(line.begin(), line.end(), "<<");
+	std::string::const_iterator it2;
+
+	while (it1 != line.end())
+	{
+		it2 = utils::search(it1 + 1, line.end(), "<<");
+		if (it2 == line.end() && it2 - 1 != line.end() && *(it2 - 1) == '<')
+			throw std::invalid_argument("wrong syntax");
+
+		if (utils::search(it1, it2, '*') != it2)
+			output += utils::extractString(it1, it2, '*');
+		else
+		{
+			std::string var = utils::extractString(it1, it2);
+			if (!var.empty() && vars.find(var) != vars.end())
+				output += vars[var]->__string();
+			else if (!var.empty() && g_arrays.find(var) != g_arrays.end())
+				output += g_arrays[var]->__string();
+			else
+				throw std::invalid_argument("invalid input or nothing to output: " + var);
+		}
+		it1 = it2;
+	}
+	displayOutput(true, output);
+	_output = true;
 }
 
 void	ScriptRunner::parseFunction(std::ifstream& file, const std::string& declaration)

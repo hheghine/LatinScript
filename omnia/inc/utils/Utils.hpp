@@ -25,7 +25,7 @@ const svector reserved = {
 	{"duplus"},		/* double	*/
 	{"dum"},		/* while	*/
 	{"scribere"},	/* cout		*/
-	{"arredo"},		/* array	*/
+	{"ordinata"},	/* array	*/
 	{"tmp"},
 	{"_"}
 };

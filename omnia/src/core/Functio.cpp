@@ -33,6 +33,9 @@ void	Functio::letsGo(const std::string& declaration)
 	if (!utils::varNameCheck(decl_vec.at(1)))
 		throw std::invalid_argument("wrong function name: " + decl_vec.at(1));
 
+	if (vars.find(decl_vec.at(1)) != vars.end())
+		throw std::invalid_argument("name already used");
+
 	_name = decl_vec[1];
 
 	if (decl_vec.at(2) != "<")

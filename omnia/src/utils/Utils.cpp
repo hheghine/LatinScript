@@ -47,11 +47,11 @@ bool	utils::varNameCheck(const std::string& name)
 	return false;
 }
 
-// statement == "arredo" || statement == "functio"
 bool	utils::isType(const std::string& statement)
 {
 	return (statement == "numerus" || statement == "filum" \
-		|| statement == "verum" || statement == "duplus");
+		|| statement == "verum" || statement == "duplus" \
+		|| statement == "ordinata");
 }
 
 bool	utils::isLoop(const std::string& statement)

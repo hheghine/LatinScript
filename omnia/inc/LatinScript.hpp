@@ -17,6 +17,7 @@
 # include "Numerus.hpp"
 # include "Filum.hpp"
 # include "Duplus.hpp"
+# include "Ordinata.hpp"
 # include "Utils.hpp"
 
 
@@ -167,6 +168,7 @@ class LatinScript {
 
 		virtual void	mainLoop(std::ifstream& file, const std::string& line) { (void)file; (void)line; }
 		virtual void	handleAssignment(const svector& vec, const_iterator lhs, const_iterator& it) = 0;
+		virtual void	handleOutput(const svector& vec, const std::string& line);
 
 		void	createVariable(const svector& vec);
 		void	handleStatement(const svector& vec, const_iterator it);
@@ -175,7 +177,6 @@ class LatinScript {
 		void	handleMultiplication(const svector& vec, const_iterator lhs, const_iterator& it);
 		void	handleDivision(const svector& vec, const_iterator lhs, const_iterator& it);
 		void	handleCondition(const svector& vec);
-		void	handleOutput(const svector& vec, const std::string& line);
 
 		bool	handleIsEqual(const std::string& lhs, const std::string& rhs);
 		bool	handleIsGreater(const std::string& lhs, const std::string& rhs);

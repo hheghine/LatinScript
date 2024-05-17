@@ -1,4 +1,6 @@
-############################ NUMERUS [INT] TEST
+############################
+#    NUMERUS [INT] TEST    #
+############################
 
 numerus x
 numerus y = -1
@@ -15,7 +17,10 @@ scribere << *blabla\t* << y << *aa* << x << *bb* << z
 
 
 
-############################ CONDITION TEST
+############################
+#      CONDITION TEST      #
+############################
+
 < x == 3 >
 	scribere << *if condition worked!*
 
@@ -33,12 +38,18 @@ scribere << *blabla\t* << y << *aa* << x << *bb* << z
 	scribere << *ELSE !!*
 
 
-############################ PRINTING [SCRIBERE] SPECIAL CHARACTERS TEST
+############################
+# PRINTING [SCRIBERE] TEST #
+############################
+
 scribere << y
 scribere << *hello\\\n*
 
 
-############################ LOOP [DUM] TEST
+############################
+#      LOOP [DUM] TEST     #
+############################
+
 dum < x > 35 >
 	scribere << *x = * << x
 	x = x - 1
@@ -46,7 +57,10 @@ dum < x > 35 >
 scribere << *still working fine*
 
 
-############################ FUNCTION [FUNCTIO] TEST
+############################
+#  FUNCTION [FUNCTIO] TEST #
+############################
+
 numerus n
 
 functio sum < numerus a, numerus b > : numerus
@@ -67,7 +81,10 @@ numerus m = div < 10, 5 >
 scribere << *m = * << m
 
 
-############################ RECURSION TEST
+############################
+#      RECURSION TEST      #
+############################
+
 numerus res
 
 functio rec_sum < numerus first, numerus second > : numerus
@@ -84,7 +101,10 @@ numerus test = rec_sum < 1, 2 >
 scribere << test 
 
 
-############################ FILUM [STRING] TEST
+############################
+#    FILUM [STRING] TEST   #
+############################
+
 filum l = *hello\t*
 
 scribere << l
@@ -99,7 +119,10 @@ filum ll = *hello*
 	scribere << *YES*
 
 
-############################ DOUBLE [DUPLUS] TEST
+############################
+#    DOUBLE [DUPLUS] TEST  #
+############################
+
 x = 6
 
 duplus dp = 3.14
@@ -107,3 +130,16 @@ scribere << dp
 
 x = dp * x
 scribere << x
+
+
+############################
+#  ARRAY [ORDINATA] TEST   #
+############################
+
+ordinata < numerus > arr = < 1, 2, 3, 4, 5 >
+
+scribere << arr
+
+arr < 2 > = 42
+
+scribere << arr
