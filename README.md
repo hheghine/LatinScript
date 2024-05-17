@@ -183,4 +183,17 @@ scribere << dp
 
 x = dp * x
 scribere << x
+
+
+############################
+#  ARRAY [ORDINATA] TEST   #
+############################
+
+ordinata < numerus > arr = < 1, 2, 3, 4, 5 >
+
+scribere << arr
+
+arr < 2 > = 42
+
+scribere << arr
 ```
