@@ -45,6 +45,9 @@ A GNU Makefile is included for ease of compilation of this project.
 >  ./latin-script <filename.ls>
 
 ```
+> [!NOTE]
+> whitespaces are important for syntax
+
 ```
 #######################################
 #       SCRIPT EXAMPLE: code.ls       #
