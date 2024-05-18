@@ -143,3 +143,12 @@ scribere << arr
 arr < 2 > = 42
 
 scribere << arr
+
+numerus idx = 0
+
+dum < idx < 5 >
+	arr < idx > = 42
+	idx = idx + 1
+
+scribere << arr
+scribere << *you have found the answer !!*
