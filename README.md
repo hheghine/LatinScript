@@ -42,7 +42,7 @@ installed on your system, with all standard libraries installed.
 A GNU Makefile is included for ease of compilation of this project.
 
 >  make
->  ./latin-script <filename.ls>
+>  ./latin-script script/code.ls
 
 ```
 > [!NOTE]
@@ -199,4 +199,13 @@ scribere << arr
 arr < 2 > = 42
 
 scribere << arr
+
+numerus idx = 0
+
+dum < idx < 5 >
+	arr < idx > = 42
+	idx = idx + 1
+
+scribere << arr
+scribere << *you have found the answer !!*
 ```
