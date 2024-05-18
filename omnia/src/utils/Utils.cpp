@@ -39,6 +39,9 @@ bool	utils::varNameCheck(const std::string& name)
 		if (name == *it)
 			return false;
 
+	if (name.find('+') != std::string::npos)
+		return false;
+
 	if ((name[0] >= 65 && name[0] <= 90) || \
 		(name[0] >= 97 && name[0] <= 122) || \
 		name[0] == '_')
