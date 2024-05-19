@@ -9,7 +9,7 @@ class Object;
 class Duplus : public Object {
 	public:
 		Duplus();
-		Duplus(Object* ptr);
+		explicit Duplus(Object* ptr);
 		~Duplus();
 
 		void	setValue(const Object* rhs);

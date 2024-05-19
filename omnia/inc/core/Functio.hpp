@@ -22,7 +22,7 @@ class Functio : public LatinScript {
 		// static int					_in_function;
 
 	public:
-		Functio(const std::string& declaration);
+		explicit Functio(const std::string& declaration);
 		~Functio();
 
 	public:

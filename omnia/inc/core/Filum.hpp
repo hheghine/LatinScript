@@ -7,7 +7,7 @@
 class Filum : public Object {
 	public:
 		Filum();
-		Filum(Object* ptr);
+		explicit Filum(Object* ptr);
 		~Filum();
 
 		void	setValue(const Object* rhs);

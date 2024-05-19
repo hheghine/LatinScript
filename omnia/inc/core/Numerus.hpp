@@ -9,7 +9,7 @@ class Object;
 class Numerus : public Object {
 	public:
 		Numerus();
-		Numerus(Object* ptr);
+		explicit Numerus(Object* ptr);
 		~Numerus();
 
 		void	setValue(const Object* rhs);

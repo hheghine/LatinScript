@@ -13,7 +13,7 @@ class Ordinata {
 		std::string	_type;
 
 	public:
-		Ordinata(const std::string& init);
+		explicit Ordinata(const std::string& init);
 		~Ordinata();
 
 	public:
