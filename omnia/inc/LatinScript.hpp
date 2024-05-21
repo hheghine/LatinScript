@@ -95,7 +95,7 @@ const std::unordered_map<std::string, conditions> condition_map = {
 inline static void	usage()
 {
 	std::cout << ls::BGRY << "+-------------------------------------------------------+\n" << "|" \
-	<< ls::GRY << "\tUsage: " << ls::MAIN << "./latins-cript <*******.ls>" \
+	<< ls::GRY << "\tUsage: " << ls::MAIN << "./latin-script <*******.ls>" \
 	<< ls::BGRY << "\t\t|\n" << "+-------------------------------------------------------+" \
 	<< ls::CRST << std::endl;
 }
