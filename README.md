@@ -1,11 +1,8 @@
-<div align="center">
-  <h1>Latin Script</h1>
-</div>
-
 <p align="center">
-  <img src="https://github.com/hheghine/LatinScript/assets/119530584/0adb13ad-78fe-47a4-8461-816ca6392e9c" />
+  <img src="https://github.com/hheghine/LatinScript/assets/119530584/8b7096ab-aed7-4677-b30a-339695988134" />
   <i><br>Interpreter written in C++ that can process and execute Latin-based scripting language code</i><br><br>
 </p>
+
 
 
 ```
