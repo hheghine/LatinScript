@@ -25,7 +25,7 @@ NAME_LINE_9 = ▀                                                               
 
 
 
-PRINT_NAME = echo "\n$(LINE_COLORS_1)$(NAME_LINE_1)$(LINE_COLORS_2)$(NAME_LINE_2)$(LINE_COLORS_3)$(NAME_LINE_3)$(LINE_COLORS_4)$(NAME_LINE_4)$(LINE_COLORS_5)$(NAME_LINE_5)$(LINE_COLORS_6)$(NAME_LINE_6)$(LINE_COLORS_7)$(NAME_LINE_7)$(LINE_COLORS_8)$(NAME_LINE_8)$(LINE_COLORS_9)$(NAME_LINE_9)$(END)"
+PRINT_NAME = echo "\n$(LINE_COLORS_1)	$(NAME_LINE_1)$(LINE_COLORS_2)	$(NAME_LINE_2)$(LINE_COLORS_3)	$(NAME_LINE_3)$(LINE_COLORS_4)	$(NAME_LINE_4)$(LINE_COLORS_5)	$(NAME_LINE_5)$(LINE_COLORS_6)	$(NAME_LINE_6)$(LINE_COLORS_7)	$(NAME_LINE_7)$(LINE_COLORS_8)	$(NAME_LINE_8)$(LINE_COLORS_9)	$(NAME_LINE_9)$(END)"
 
 
 
@@ -57,7 +57,7 @@ all : $(NAME)
 
 $(NAME) : $(OBJS_DIR) $(OBJS) Makefile
 	$(CXX) $(CXXFLAGS) $(OBJS) -o $(NAME)
-	@printf "$(LINE_COLORS_3)%15s Compilation of $(NAME) terminated $(END)$(LINE_COLORS_1)\
+	@printf "$(LINE_COLORS_3)%40s Compilation of $(NAME) terminated $(END)$(LINE_COLORS_1)\
 	$(BLINK)[$(LINE_COLORS_6)$(BLINK)success$(BLINK)$(LINE_COLORS_1)]$(END)\n\n"
 	
 $(OBJS_DIR) :
@@ -75,7 +75,7 @@ clean :
 
 fclean : clean
 	@rm -rf $(NAME)
-	@printf "\n$(LINE_COLORS_3)%20s Removing $(NAME)$(END)\n\n"
+	@printf "\n$(LINE_COLORS_3)%50s Removing $(NAME)$(END)\n\n"
 
 re : fclean all
 
